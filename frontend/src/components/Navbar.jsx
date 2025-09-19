@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import assets from '../assets/assets'
+
 import ThemeToggleBtn from './ThemeToggleBtn'
+import assets from '../assets/assets'
 import { motion } from "motion/react"
 
-const Navbar = ({theme, setTheme}) => {
+const Navbar = ({theme, setTheme, activeTab, setActiveTab}) => {
 
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -20,10 +21,9 @@ const Navbar = ({theme, setTheme}) => {
 
             <img src={assets.close_icon} alt="" className='w-5 absolute right-4 top-4 sm:hidden' onClick={()=> setSidebarOpen(false)}/>
 
-            <a onClick={()=>setSidebarOpen(false)} href="#" className='sm:hover:border-b'>Home</a>
-            <a onClick={()=>setSidebarOpen(false)} href="#services" className='sm:hover:border-b'>Services</a>
-            <a onClick={()=>setSidebarOpen(false)} href="#our-work" className='sm:hover:border-b'>Our Work</a>
-            <a onClick={()=>setSidebarOpen(false)} href="#contact-us" className='sm:hover:border-b'>Contact Us</a>
+            <button onClick={()=>{setActiveTab('today'); setSidebarOpen(false)}} className={`sm:hover:border-b ${activeTab==='today' ? 'underline' : ''}`}>Today</button>
+            <button onClick={()=>{setActiveTab('weekly'); setSidebarOpen(false)}} className={`sm:hover:border-b ${activeTab==='weekly' ? 'underline' : ''}`}>Weekly</button>
+            <button onClick={()=>{setActiveTab('analyst'); setSidebarOpen(false)}} className={`sm:hover:border-b ${activeTab==='analyst' ? 'underline' : ''}`}>Analyst</button>
         </div>
 
         <div className='flex items-center gap-2 sm:gap-4'>
@@ -32,7 +32,7 @@ const Navbar = ({theme, setTheme}) => {
 
             <img src={theme === 'dark' ? assets.menu_icon_dark : assets.menu_icon} alt="" onClick={()=> setSidebarOpen(true)} className='w-8 sm:hidden'/>
 
-            <a href="#contact-us" className='text-sm max-sm:hidden flex items-center gap-2 bg-primary text-white px-6 py-2 rounded-full cursor-pointer hover:scale-103 transition-all'>
+            <a href="#" className='text-sm max-sm:hidden flex items-center gap-2 bg-primary text-white px-6 py-2 rounded-full cursor-pointer hover:scale-103 transition-all'>
                 Connect <img src={assets.arrow_icon} width={14} alt="" />
             </a>
         </div>
