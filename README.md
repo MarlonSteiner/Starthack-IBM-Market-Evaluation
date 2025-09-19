@@ -1,86 +1,89 @@
-MarketPulse Lite
+# MarketPulse Lite
 
-One-liner:
-A prototype tool that detects market-moving financial news, summarizes it, and tailors insights to specific bank clients. It helps IBM teams deliver faster, smarter pitches.
+A prototype tool that detects market‑moving financial news, summarizes it, and tailors insights to specific bank clients — helping teams deliver faster, smarter pitches.
 
-Alternatives if you want shorter:
+## Case introduction
 
-Detect, summarize, and package market-moving news for client-ready briefs.
+- **Problem**: To build a clear financial perspective, analysts and strategists must constantly scan global news for market‑moving events and portfolio‑relevant developments. This is resource‑intensive and risks missing critical items.
+- **Goal**: Develop a prototype that automatically identifies news relevant to financial markets (e.g., Fed decisions, CEO exits, earnings surprises), summarizes them, and prepares them for human‑in‑the‑loop review before delivery to clients.
+- **Audience**: End users are analysts who turn this information into ad‑hoc communication for clients (e.g., CIOs who must brief advisors quickly and accurately or adapt portfolios accordingly).
 
-Hourly news in, three-line insights out, weekly brief ready to send.
+## Solution overview
 
-Use case
-Who is the user
+- Ingest market news from high‑signal public sources and/or APIs
+- Classify relevance to assets and regions
+- Auto‑draft three short lines: What happened, Why it matters, Portfolio impact
+- Human approves before publication
+- Weekly brief compiles approved items from the last 7 days
 
-Primary: Relationship Manager or Investment Advisor at a Swiss wealth or asset manager
-Goal: brief clients with credible, recent insights and share a weekly “Current Perspectives” summary with minimal effort.
+## Key workflows
 
-Secondary: Research Analyst or PM
-Goal: curate incoming items, edit tone, approve content, ensure compliance.
+- Hourly update: pull feeds/APIs, dedupe, classify, draft three lines
+- Curation: analyst reviews queue, tweaks text, approves
+- Advisor view: Today and Weekly tabs; copy text or share PDF
+- Weekly brief: compile only approved items from the last 7 days
+- Publish: store PDF and share via pre‑signed link
 
-Tertiary: End client (HNW or institutional)
-Goal: receive a concise weekly perspective that explains what happened, why it matters, and the portfolio impact.
+## Data the user should see
 
-Problem
+- For analysts: ingestion status, relevance score, editable fields (title, lead, bullets, tags), approval state with timestamp, error states
+- For advisors: last refresh time, 7‑day coverage window, source and link, publish time, three‑line summary, tags, simple impact chip, editorial cutoff, legal disclaimer, quick actions
+- For clients: weekly PDF with week range, approved cards, editorial cutoff, imprint and disclaimer
 
-Advisors need timely, trustworthy talking points without trawling dozens of sources. Weekly summaries take too long to prepare and are inconsistent in tone.
+## Non‑functional requirements
 
-Solution
+- Freshness (hourly)
+- Reliability (graceful degradation on source failure)
+- Auditability (who approved what and when)
+- Compliance (sources, cutoff, disclaimer)
+- Localization (DE and EN)
+- Minimal PII
 
-Ingest market news hourly from high-signal sources
+## IBM Cloud footprint (target)
 
-Classify relevance to assets and regions
+- Compute: FastAPI on IBM Cloud Code Engine
+- AI: watsonx.ai Granite for summarization and classification
+- Storage: IBM Cloud Object Storage for PDFs; Postgres for app data
+- Scheduling: Code Engine cron or Cloud Functions for hourly ingest
 
-Auto-draft three short lines: What happened, Why it matters, Portfolio impact
+## Repository structure
 
-Human approves
+```
+.
+├─ README.md
+├─ frontend/              # Vite + React UI
+│  ├─ package.json
+│  └─ ...
+```
 
-Compile a weekly PDF showing only items from the last 7 days
+## Frontend quickstart
 
-Key workflows
+```bash
+# from repository root
+cd frontend
+npm install
+npm run dev
+```
 
-Hourly update: system pulls feeds and APIs, dedupes, classifies, drafts three lines.
+- Dev server: http://localhost:5173
+- Build/preview:
+```bash
+npm run build
+npm run preview
+```
 
-Curation: analyst reviews the queue, tweaks text, clicks Approve.
+## Use case summary
 
-Advisor view: Today and Weekly tabs. Copy LinkedIn text or share the PDF.
+The bot acts as an early‑warning system:
+- Detects relevant news
+- Flags and summarizes it
+- Provides context (why it matters)
+- Delivers draft text for human review
 
-Weekly brief: compile only approved items from the last 7 days.
+**Business case**: Saves analysts’ time, increases client responsiveness, and strengthens the team’s role as trusted interpreter.
 
-Publish: store PDF in IBM Cloud Object Storage and share a pre-signed link.
+## IBM resources
 
-Data the user should know
-
-For advisors: last refresh time, 7-day coverage window, source and link, publish time, three-line summary, asset and region tags, simple impact chip (up, down, neutral), editorial cutoff, legal disclaimer, quick actions.
-
-For analysts: ingestion status, relevance score, editable fields (title, lead, bullets, tags), approval state with timestamp, error states.
-
-For clients: weekly PDF with week range, approved cards, editorial cutoff, imprint and disclaimer.
-
-Non-functional requirements
-
-Freshness (hourly), reliability (graceful degradation on source failure), auditability (who approved what and when), compliance (sources, cutoff, disclaimer), localization (DE and EN), minimal PII.
-
-IBM Cloud footprint
-
-Compute: FastAPI on IBM Cloud Code Engine
-
-AI: watsonx.ai Granite for summarize and classify
-
-Storage: IBM Cloud Object Storage for PDFs; Postgres for app data
-
-Scheduling: Code Engine cron or Cloud Functions for hourly ingest
-
-Definition of done (MVP)
-
-Only items from the last 7 days are visible and timestamped with last refresh
-
-Each item has title, source, link, three short lines, tags, and impact
-
-Approve flow works end to end
-
-Weekly PDF includes editorial cutoff, authors, imprint, and disclaimer
-
-Deployed on IBM Cloud and accessible to judges
-
-One real example formatted to match “Current Perspectives” tone
+- IBMid registration: https://www.ibm.com/docs/en/controller/11.1.1?topic=authentication-ibmid-registration
+- watsonx Orchestrate: https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=getting-started-watsonx-orchestrate
+- Cloud Pak for Data learning path: https://developer.ibm.com/learningpaths/get-started-watson-studio/
