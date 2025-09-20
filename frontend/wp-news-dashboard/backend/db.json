@@ -1,0 +1,145 @@
+{
+  "tags": [
+    {
+      "id": 1,
+      "name": "Monetary Policy"
+    },
+    {
+      "id": 2,
+      "name": "Politics"
+    },
+    {
+      "id": 3,
+      "name": "CEO Exit"
+    },
+    {
+      "id": 5,
+      "name": "M&A"
+    },
+    {
+      "id": 6,
+      "name": "Earnings"
+    },
+    {
+      "id": 7,
+      "name": "IPO"
+    },
+    {
+      "id": 8,
+      "name": "Product Launch"
+    },
+    {
+      "id": 9,
+      "name": "Regulation"
+    },
+    {
+      "id": 10,
+      "name": "Geopolitics"
+    },
+    {
+      "id": 11,
+      "name": "USA"
+    },
+    {
+      "id": 12,
+      "name": "Aktien"
+    },
+    {
+      "id": 13,
+      "name": "Sonstiges"
+    },
+    {
+      "id": 14,
+      "name": "Inflation"
+    }
+  ],
+  "articles": [
+    {
+      "id": "41672e41af82008f",
+      "title": "CNBC Täglicher Start: Nvidia invest",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2025/09/19/cnbc-daily-open-nvidia-is-deploying-its-cash-to-cement-its-position.html",
+      "date": "2025-09-19",
+      "time": "06:30:01",
+      "priority": "Hoch",
+      "summary": "Nvidia sorgt dafür, dass sich andere künstliche Intelligenz-Firmen in ihrer Nähe halten, indem es Anteile übernehmt, ohne große Übernahmen zu tätigen. Nvidias Aktie steigt im nachbörslichen Handel um 1,56 % und notiert bei 367,60 $ pro Aktie.",
+
+      "context": "Bewertung von Käufer und Ziel hängt an Bedingungen, Verwässerung, Synergien und Kartellfreigabe.",
+      "draftText":"CNBC Daily Open: Was macht Nvidia mit all seinem Geld? Ereignis: M&A · Priorität: Hoch · Ticker: NVDA · Quelle: CNBC. — Bewertung von Käufer und Ziel hängt an Bedingungen, Verwässerung, Synergien und Kartellfreigabe.",
+      "tags": [
+        "M&A",
+        "USA",
+        "Aktien"
+      ]
+    },
+    {
+      "id": "4459ac19fe6864ed",
+      "title": "Miran, Mitglied des Federal Reserve Committee, erklärte, dass er keine Tarife als",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2025/09/19/miran-says-he-doesnt-see-tariffs-causing-inflation-putting-him-in-minority-on-fed-committee.html",
+      "date": "2025-09-19",
+      "time": "16:12:21",
+      "priority": "Mittel",
+      "summary": "Federal Reserve Gouverneur Stephen Miran äußerte sich am Freitag im CNBC-Format \"Money Movers\".",
+      "context": "Der Gouverneur der Federal Reserve, Stephen Miran, gab am Freitag im CNBC-Format \"Money Movers\" eine Rede. Er erklärte, dass das Vermögen der Federal Reserve im Laufe der näch",
+      "draftText": "Federal Reserve Gouverneur Stephen Miran äußerte sich am Freitag im CNBC-Format \"Money Movers\". Federal Reserve Gouverneur Stephen Miran erklärte am Freitag, er erwarte nicht, dass die von Präsident Donald Trump eingeführten Zölle einen infl — Der Gouverneur der Federal Reserve, Stephen Miran, gab am Freitag im CNBC-Format \"Money Movers\" eine Rede. Er erklärte, dass das Vermögen der Federal Reserve im Laufe der näch",
+      "tags": [
+        "Sonstiges",
+        "USA",
+        "Aktien"
+      ]
+    },
+    {
+    "id": "03c8ebf448f1bac5",
+    "title": "Der US-Dollar ist die weltweit wichtig",
+    "source": "CNBC",
+    "url": "https://www.cnbc.com/2025/09/19/apple-ceo-tim-cook-iphone-price-increase-tariffs.html",
+    "date": "2025-09-19",
+    "time": "13:52:25",
+    "priority": "Mittel",
+    "summary": "In einem Interview mit der Nikkei Asian Review sagte Cook, dass die Preiserhöhungen auf einen „starken Dollar“ und einen „schwachen Yen“ sowie auf steigende Produktionskosten zurückzuführen seien. „Wir legen unsere Preise auf Grundlage der Wechselkurse fest, und die Wechselkurse haben sich in den vergangenen Monaten stark verändert“, sagte Cook. Er fügte hinzu, dass das Unternehmen „stets prüft“, welche Auswirkungen Zölle auf sein Geschäft haben, jedoch dass",
+    "context": "Politik- und Lieferkettenrisiken beeinflussen Sektormultiplikatoren und Nachfrage.",
+    "draftText": "Apple-CEO Tim Cook sagt, dass die iPhone-Preiserhöhungen nicht mit Zöllen zusammenhängen. Ereignis: Geopolitik · Priorität: Mittel · Ticker: AAPL · Quelle: CNBC. — Politik- und Lieferkettenrisiken beeinflussen Sektormultiplikatoren und Nachfrage.",
+    "tags": [
+      "Sonstiges",
+      "USA",
+      "Aktien"
+    ]
+    },
+    {
+    "id": "16679b238f2c945e",
+    "title": "Wall Street setzt auf den Boom im Chip-Sektor und die Konzentration nimmt",
+    "source": "CNBC",
+    "url": "https://www.cnbc.com/2025/09/19/chip-stocks-ai-tech-investing-etfs.html",
+    "date": "2025-09-19",
+    "time": "16:44:22",
+    "priority": "Niedrig",
+    "summary": "Die Aktien des Unternehmens haben sich im vergangenen Jahr mehr als verdoppelt und sind seit Anfang 2023 um rund 75 % gestiegen. Die Marktkapitalisierung von Nvidia hat die 600 Milliarden US-Dollar überschritten und macht das Unternehmen zu einem der wertvollsten der Welt. Der Erfolg des Unternehmens wird größtenteils seiner starken Position im KI-Markt zugeschrieben, da seine Chips in Anwendungen wie Aut… weit verbreitet sind.",
+    "context": "Potenzielle Relevanz für Titel/Sektor; Details verifizieren.",
+    "draftText": "Die Wetten der Wall Street auf den Chip-Boom werden zunehmend konzentriert, und das könnte eine gute Sache sein. Ereignis: Sonstige Ereignisse · Priorität: Niedrig · Ticker: NVDA · Quelle: CNBC. — Potenzielle Relevanz für Titel/Sektor; Details verifizieren.",
+    "tags": [
+      "Sonstiges",
+      "USA",
+      "Aktien"
+    ]
+    },
+    {
+      "id": "dc5f680b6f00d163",
+      "title": "Microsoft hat die Preise für Xbox-Konsolen in den USA erhöht",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2025/09/19/microsoft-xbox-prices-tariffs-macroeconomic-conditions.html",
+      "date": "2025-09-19",
+      "time": "19:37:08",
+      "priority": "Mittel",
+      "summary": "Viele Konsumgüterunternehmen haben monatelang gewarnt, dass höhere Preise bevorstehen, nachdem Präsident Trump die Zölle eingeführt hat. The U.S. dollar has been on a tear this year, gaining 4.5% against the euro and 3.5% against the yen",
+      "context": "Politik- und Lieferkettenrisiken beeinflussen Sektormultiplikatoren und Nachfrage.",
+     "draftText": "Microsoft erhöht die Preise für Xbox-Konsolen in den USA aufgrund der wirtschaftlichen Rahmenbedingungen. Ereignis: Geopolitik · Priorität: Mittel · Ticker: MSFT · Quelle: CNBC. — Politik- und Lieferkettenrisiken beeinflussen Sektormultiplikatoren und Nachfrage.",
+      "tags": [
+        "Sonstiges",
+        "USA",
+        "Aktien"
+      ]
+    }
+  ],
+  "subscriptions": []
+}
