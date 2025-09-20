@@ -145,6 +145,10 @@ ENV/
 env.bak/
 venv.bak/
 
+!.env.example
+!backend/.env.example
+!frontend/wp-news-dashboard/backend/.env.example
+
 # Spyder project settings
 .spyderproject
 .spyproject
