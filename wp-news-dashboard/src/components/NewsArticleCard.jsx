@@ -1,6 +1,12 @@
 import React from 'react';
-// Das neue Icon importieren
 import { CheckCircleIcon, XCircleIcon, ExternalLinkIcon } from './icons';
+
+// Das Farb-Mapping bleibt bestehen
+const priorityColors = {
+    High: 'bg-red-500',
+    Medium: 'bg-yellow-400',
+    Low: 'bg-green-500',
+};
 
 const NewsArticleCard = ({ article, onToggleDraft, isDrafting }) => {
     
@@ -10,12 +16,20 @@ const NewsArticleCard = ({ article, onToggleDraft, isDrafting }) => {
         : 'bg-slate-700 hover:bg-slate-800 text-white';
 
     return (
-        <div className={`rounded-lg border overflow-hidden mb-6 transition-all duration-300 bg-white ${cardStyle}`}>
+        <div className={`relative rounded-lg border overflow-hidden mb-6 transition-all duration-300 bg-white ${cardStyle}`}>
+            
+            {/* AKTUALISIERTER PRIORITÄTS-INDIKATOR MIT TEXT */}
+            <div 
+                className={`absolute top-4 right-4 px-2.5 py-1 text-xs font-semibold text-white rounded-full ${priorityColors[article.priority] || 'bg-gray-300'}`}
+            >
+                Priority: {article.priority} 
+            </div>
+
             <div className="p-6">
-                {/* ... (Der obere Teil der Karte bleibt unverändert) ... */}
                 <div className="mb-3">
                     <p className="text-sm text-gray-500">{article.source} &middot; {article.date}</p>
-                    <h2 className="text-xl font-semibold text-gray-800 mt-1">{article.title}</h2>
+                    {/* HINZUFÜGEN: Mehr Platz für den Titel, um Überlappung zu vermeiden */}
+                    <h2 className="text-xl font-semibold text-gray-800 mt-1 pr-28">{article.title}</h2>
                     <div className="flex flex-wrap gap-2 mt-3">
                         {article.tags.map(tag => (
                             <span key={tag} className="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
@@ -38,24 +52,14 @@ const NewsArticleCard = ({ article, onToggleDraft, isDrafting }) => {
                 </div>
             </div>
 
-            {/* AKTUALISIERTE AKTIONSLEISTE */}
             <div className="bg-gray-100 px-6 py-3 flex justify-between items-center border-t">
-                {/* NEUER LINK-BUTTON LINKS */}
-                <a
-                    href={article.url}
-                    target="_blank" // Öffnet den Link in einem neuen Tab
-                    rel="noopener noreferrer" // Wichtig für die Sicherheit
-                    className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
-                >
+                <a href={article.url} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-200 transition-colors">
                     <ExternalLinkIcon className="w-4 h-4" />
                     <span>View Source</span>
                 </a>
-                
-                {/* Bestehender Button RECHTS */}
-                <button 
-                    onClick={() => onToggleDraft(article.id)}
-                    className={`flex items-center space-x-2 px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 ${buttonStyle}`}
-                >
+                <button onClick={() => onToggleDraft(article.id)}
+                    className={`flex items-center space-x-2 px-4 py-2 text-sm font-medium rounded-md transition-colors ${buttonStyle}`}>
                     {isDrafting ? <XCircleIcon className="w-4 h-4" /> : <CheckCircleIcon className="w-4 h-4" />}
                     <span>{isDrafting ? 'Remove from Draft' : 'Add to Draft Text'}</span>
                 </button>

@@ -1,26 +1,29 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 
+// Die neue Komponente importieren
 import Header from './components/Header';
 import TagFilter from './components/TagFilter';
+import PriorityFilter from './components/PriorityFilter'; // NEU
 import DraftingArea from './components/DraftingArea';
 import NewsArticleCard from './components/NewsArticleCard';
 
 const API_BASE_URL = 'http://localhost:3001/api';
 
 function App() {
-    // ... (andere States bleiben gleich)
     const [articles, setArticles] = useState([]);
     const [allTags, setAllTags] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
     const [draftingArticleIds, setDraftingArticleIds] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    // NEUER STATE für die temporäre Nachricht
     const [tagMessage, setTagMessage] = useState('');
 
+    // NEUER STATE für die Prioritätenfilter
+    const [selectedPriorities, setSelectedPriorities] = useState([]);
+
     useEffect(() => {
+        // ... (Datenabruf bleibt unverändert)
         const fetchData = async () => {
             try {
                 const [articlesResponse, tagsResponse] = await Promise.all([
@@ -29,15 +32,21 @@ function App() {
                 ]);
                 setArticles(articlesResponse.data);
                 setAllTags(tagsResponse.data);
-            } catch (err) {
-                setError('Failed to load data from the server.');
-            } finally {
-                setIsLoading(false);
-            }
+            } catch (err) { setError('Failed to load data from the server.'); } 
+            finally { setIsLoading(false); }
         };
         fetchData();
     }, []);
     
+    // NEUER HANDLER für die Prioritäten
+    const handlePriorityToggle = (priority) => {
+        setSelectedPriorities(prev =>
+            prev.includes(priority)
+            ? prev.filter(p => p !== priority)
+            : [...prev, priority]
+        );
+    };
+
     const handleTagToggle = (tagName) => {
         setSelectedTags(prevTags => 
             prevTags.includes(tagName) 
@@ -75,13 +84,7 @@ function App() {
             alert("Error: Could not add the new tag. Check console (F12) for details.");
         }
     };
-    
-    const filteredArticles = useMemo(() => {
-        if (selectedTags.length === 0) return articles;
-        return articles.filter(article => 
-            article.tags.some(tag => selectedTags.includes(tag))
-        );
-    }, [articles, selectedTags]);
+
 
     const handleToggleDraft = (articleId) => {
         setDraftingArticleIds(prevIds => 
@@ -95,6 +98,28 @@ function App() {
         setDraftingArticleIds([]);
     };
 
+    // ERWEITERTE FILTERLOGIK
+    const filteredArticles = useMemo(() => {
+        let tempArticles = articles;
+
+        // 1. Nach Tags filtern
+        if (selectedTags.length > 0) {
+            tempArticles = tempArticles.filter(article => 
+                article.tags.some(tag => selectedTags.includes(tag))
+            );
+        }
+
+        // 2. Nach Prioritäten filtern
+        if (selectedPriorities.length > 0) {
+            tempArticles = tempArticles.filter(article =>
+                selectedPriorities.includes(article.priority)
+            );
+        }
+
+        return tempArticles;
+    }, [articles, selectedTags, selectedPriorities]); // Abhängigkeit hinzugefügt
+
+
     return (
         <div className="bg-gray-50 min-h-screen font-sans text-gray-900">
             <Header />
@@ -106,7 +131,7 @@ function App() {
                 
                 <div className="lg:grid lg:grid-cols-12 lg:gap-8">
                     <div className="lg:col-span-8">
-                       {/* ... (Nachrichtenanzeige bleibt unverändert) ... */}
+                       {/* ... (Nachrichtenanzeige unverändert) ... */}
                        {!isLoading && !error && filteredArticles.map(article => (
                            <NewsArticleCard 
                                 key={article.id} 
@@ -124,8 +149,13 @@ function App() {
                                 onTagToggle={handleTagToggle}
                                 onAddNewTag={handleAddNewTag}
                                 onClearFilters={handleClearFilters}
-                                tagMessage={tagMessage} // Die Nachricht als Prop übergeben
+                                tagMessage={tagMessage}
                             />
+                            {/* NEUE KOMPONENTE HIER EINGEFÜGT */}
+                             <PriorityFilter
+                                selectedPriorities={selectedPriorities}
+                                onPriorityToggle={handlePriorityToggle}
+                             />
                              <DraftingArea 
                                 articles={articles}
                                 draftingArticleIds={draftingArticleIds}
