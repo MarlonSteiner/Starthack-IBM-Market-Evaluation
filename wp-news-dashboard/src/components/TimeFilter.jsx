@@ -3,7 +3,7 @@ import React from 'react';
 const TimeFilter = ({ hours, onHoursChange }) => {
   return (
     <div className="bg-white p-6 border border-slate-200 rounded-lg shadow-md">
-      <h3 className="text-lg font-semibold text-slate-800 mb-4">Filter by Time</h3>
+      <h3 className="text-lg font-semibold text-slate-800 mb-4">Nach Zeit filtern</h3>
       <div className="space-y-4">
         <input
           type="range"
@@ -11,7 +11,6 @@ const TimeFilter = ({ hours, onHoursChange }) => {
           max="72"
           value={hours}
           onChange={(e) => onHoursChange(parseInt(e.target.value, 10))}
-          // HINZUGEFÜGT/GEÄNDERT: Klassen zur Gestaltung des Slider-Kreises ("thumb")
           className="
             w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer
             [&::-webkit-slider-thumb]:appearance-none
@@ -26,7 +25,7 @@ const TimeFilter = ({ hours, onHoursChange }) => {
           "
         />
         <div className="text-center text-sm text-slate-600 font-medium">
-          Show news from the last <span className="font-bold text-slate-800">{hours}</span> hours
+          Zeige Nachrichten der letzten <span className="font-bold text-slate-800">{hours}</span> Stunden
         </div>
       </div>
     </div>

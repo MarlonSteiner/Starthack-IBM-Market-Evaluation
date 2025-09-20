@@ -36,7 +36,7 @@ function App() {
                 setArticles(sortedArticles);
                 setAllTags(tagsResponse.data);
             } catch (err) {
-                setError('Failed to load data from the server.');
+                setError('Daten konnten nicht vom Server geladen werden.');
             } finally {
                 setIsLoading(false);
             }
@@ -55,7 +55,7 @@ function App() {
             await axios.post(`${API_BASE_URL}/subscribe`, subscriptionData);
         } catch (err) {
             console.error("Subscription failed:", err.response || err);
-            alert("Error: Could not save subscription.");
+            alert("Fehler: Abonnement konnte nicht gespeichert werden.");
         }
     };
 
@@ -89,38 +89,29 @@ function App() {
         setTimeFilterHours(72);
     };
 
-    // KORRIGIERTE FUNKTION: Verhindert den alert() und zeigt die rote Nachricht korrekt an.
+    // Handler to add a new tag and process it on the backend
     const handleAddNewTag = async (tagName) => {
         setTagMessage('');
         try {
             const response = await axios.post(`${API_BASE_URL}/tags/process`, { name: tagName });
-            
-            // Wir arbeiten direkt mit der Server-Antwort, ohne 'newTag' zu erwarten
             const { updatedArticles, allTags: updatedAllTags } = response.data;
-            
             setArticles(updatedArticles);
             setAllTags(updatedAllTags);
-            
-            // Wir verwenden den `tagName`, den wir bereits kennen, anstatt auf `newTag.name` zu warten
             setSelectedTags([tagName]); 
             
-            // Prüfen, ob der Tag in den aktualisierten Artikeln gefunden wurde
             const matches = updatedArticles.filter(article => 
                 article.tags && article.tags.includes(tagName)
             );
             
-            // Wenn keine Treffer, zeige die rote Nachricht an
             if (matches.length === 0) {
-                setTagMessage('Could not find tag related news');
+                setTagMessage('Keine Artikel für diesen Tag gefunden');
                 setTimeout(() => {
                     setTagMessage('');
                 }, 3000);
             }
-
         } catch (err) {
             console.error("API Call Failed:", err.response || err);
-            // Diese alert()-Box wird jetzt nicht mehr durch den Laufzeitfehler ausgelöst
-            alert("Error: Could not process the new tag. See console for details.");
+            alert("Fehler: Neuer Tag konnte nicht verarbeitet werden. Details in der Konsole.");
         }
     };
 
@@ -149,10 +140,8 @@ function App() {
             if (articleDate < cutoffDate) {
                 return false;
             }
-
             const priorityMatch = selectedPriorities.length === 0 || selectedPriorities.includes(article.priority);
             const tagMatch = selectedTags.length === 0 || article.tags.some(tag => selectedTags.includes(tag));
-            
             return priorityMatch && tagMatch;
         });
     }, [articles, selectedTags, selectedPriorities, timeFilterHours]);
@@ -162,9 +151,8 @@ function App() {
             <Header />
             <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-                    {/* Left column for news articles */}
                     <div className="lg:col-span-8">
-                        {isLoading && <p>Loading articles...</p>}
+                        {isLoading && <p>Lade Artikel...</p>}
                         {error && <p className="text-red-500">{error}</p>}
                         {!isLoading && !error && filteredArticles.length > 0 ? (
                             filteredArticles.map(article => (
@@ -176,11 +164,9 @@ function App() {
                                 />
                             ))
                         ) : (
-                           !isLoading && <div className="text-center py-16"><p className="text-slate-500">No articles match the current filters.</p></div>
+                           !isLoading && <div className="text-center py-16"><p className="text-slate-500">Keine Artikel entsprechen den aktuellen Filtern.</p></div>
                         )}
                     </div>
-
-                    {/* Right column for filters and drafting area */}
                     <div className="lg:col-span-4">
                         <div className="sticky top-8 flex flex-col gap-8">
                             <TagFilter 
