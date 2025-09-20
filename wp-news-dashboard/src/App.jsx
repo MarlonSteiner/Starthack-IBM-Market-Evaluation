@@ -121,9 +121,11 @@ function App() {
 
 
     return (
-        <div className="bg-gray-200 min-h-screen font-sans text-gray-900">
+        <div className="bg-slate-200     min-h-screen font-sans text-slate-900">
             <Header />
             <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div className="text-left mb-10">
+                </div>
                 
                 <div className="lg:grid lg:grid-cols-12 lg:gap-8">
                     <div className="lg:col-span-8">

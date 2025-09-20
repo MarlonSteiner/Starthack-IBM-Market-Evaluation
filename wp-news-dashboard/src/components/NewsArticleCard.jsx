@@ -27,21 +27,25 @@ const NewsArticleCard = ({ article, onToggleDraft, isDrafting }) => {
 
             <div className="p-6">
                 <div className="mb-3">
-                    <p className="text-sm text-gray-500">{article.source} &middot; {article.date}</p>
-                    {/* HINZUFÜGEN: Mehr Platz für den Titel, um Überlappung zu vermeiden */}
-                    <h2 className="text-xl font-semibold text-gray-800 mt-1 pr-28">{article.title}</h2>
+                    {/* Metadaten bleiben auf 'font-medium' (geerbt) */}
+                    <p className="text-sm text-slate-500">{article.source} &middot; {article.date}</p>
+                    {/* Titel bleibt auf 'font-semibold', um hervorzustechen */}
+                    <h2 className="text-xl font-semibold text-slate-800 mt-1 pr-28">{article.title}</h2>
                     <div className="flex flex-wrap gap-2 mt-3">
+                        {/* Tags bleiben 'font-semibold' für gute Lesbarkeit */}
                         {article.tags.map(tag => (
-                            <span key={tag} className="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                            <span key={tag} className="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-100 text-slate-700">
                                 {tag}
                             </span>
                         ))}
                     </div>
                 </div>
-                <p className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2 mt-4">Summary</p>
-                <p className="text-gray-700 leading-relaxed">{article.summary}</p>
-                <div className="mt-4 p-4 bg-slate-100 border border-slate-200 rounded-md">
-                    <p className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Why it matters</p>
+                {/* Zwischenüberschriften bleiben auf 'font-medium' (geerbt) */}
+                <p className="text-sm text-slate-500 uppercase tracking-wider mb-2 mt-4">Summary</p>
+                {/* Fließtext erbt 'font-medium' */}
+                <p className="text-slate-700 leading-relaxed">{article.summary}</p>
+                <p className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Why it matters</p>
+                <div className="mt- p-2 bg-gray-100 border border-slate-200 rounded-md">
                     <p className="text-gray-700 leading-relaxed">{article.context}</p>
                 </div>
                 <div className="mt-4">

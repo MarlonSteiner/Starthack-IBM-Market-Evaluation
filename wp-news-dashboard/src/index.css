@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  /* HINZUGEFÜGT: Erhöht die Standard-Schriftstärke für die gesamte App minimal.
+     font-medium entspricht font-weight: 500; */
+  @apply font-medium;
+}
