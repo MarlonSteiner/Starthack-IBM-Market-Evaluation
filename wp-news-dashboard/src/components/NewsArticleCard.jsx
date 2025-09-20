@@ -1,11 +1,10 @@
 import React from 'react';
-import { CheckCircleIcon, XCircleIcon } from './icons';
+// Das neue Icon importieren
+import { CheckCircleIcon, XCircleIcon, ExternalLinkIcon } from './icons';
 
 const NewsArticleCard = ({ article, onToggleDraft, isDrafting }) => {
     
     const cardStyle = isDrafting ? 'border-slate-500 shadow-md' : 'border-gray-200';
-
-    // KORREKTUR HIER: Die fehlende Variablendefinition wird hinzugefügt.
     const buttonStyle = isDrafting 
         ? 'bg-red-600 hover:bg-red-700 text-white'
         : 'bg-slate-700 hover:bg-slate-800 text-white';
@@ -13,6 +12,7 @@ const NewsArticleCard = ({ article, onToggleDraft, isDrafting }) => {
     return (
         <div className={`rounded-lg border overflow-hidden mb-6 transition-all duration-300 bg-white ${cardStyle}`}>
             <div className="p-6">
+                {/* ... (Der obere Teil der Karte bleibt unverändert) ... */}
                 <div className="mb-3">
                     <p className="text-sm text-gray-500">{article.source} &middot; {article.date}</p>
                     <h2 className="text-xl font-semibold text-gray-800 mt-1">{article.title}</h2>
@@ -38,7 +38,20 @@ const NewsArticleCard = ({ article, onToggleDraft, isDrafting }) => {
                 </div>
             </div>
 
-            <div className="bg-gray-100 px-6 py-3 flex justify-end items-center border-t">
+            {/* AKTUALISIERTE AKTIONSLEISTE */}
+            <div className="bg-gray-100 px-6 py-3 flex justify-between items-center border-t">
+                {/* NEUER LINK-BUTTON LINKS */}
+                <a
+                    href={article.url}
+                    target="_blank" // Öffnet den Link in einem neuen Tab
+                    rel="noopener noreferrer" // Wichtig für die Sicherheit
+                    className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
+                >
+                    <ExternalLinkIcon className="w-4 h-4" />
+                    <span>View Source</span>
+                </a>
+                
+                {/* Bestehender Button RECHTS */}
                 <button 
                     onClick={() => onToggleDraft(article.id)}
                     className={`flex items-center space-x-2 px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 ${buttonStyle}`}

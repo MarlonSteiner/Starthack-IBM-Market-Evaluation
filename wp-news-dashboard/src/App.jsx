@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 
-// Komponenten importieren
 import Header from './components/Header';
 import TagFilter from './components/TagFilter';
 import DraftingArea from './components/DraftingArea';
@@ -10,12 +9,16 @@ import NewsArticleCard from './components/NewsArticleCard';
 const API_BASE_URL = 'http://localhost:3001/api';
 
 function App() {
+    // ... (andere States bleiben gleich)
     const [articles, setArticles] = useState([]);
     const [allTags, setAllTags] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
     const [draftingArticleIds, setDraftingArticleIds] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    // NEUER STATE für die temporäre Nachricht
+    const [tagMessage, setTagMessage] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,19 +45,37 @@ function App() {
             : [...prevTags, tagName]
         );
     };
-
-    const handleAddNewTag = async (tagName) => {
-        try {
-            const response = await axios.post(`${API_BASE_URL}/tags`, { name: tagName });
-            setAllTags(prev => [...prev, response.data]);
-            handleTagToggle(tagName);
-        } catch(err) {
-            console.error("Failed to add new tag", err);
-        }
-    };
     
     const handleClearFilters = () => setSelectedTags([]);
 
+    const handleAddNewTag = async (tagName) => {
+        // Bestehende Nachrichten löschen, bevor eine neue hinzugefügt wird
+        setTagMessage('');
+
+        try {
+            const response = await axios.post(`${API_BASE_URL}/tags/process`, { name: tagName });
+            const { newTag, updatedArticles, allTags: updatedAllTags } = response.data;
+            
+            setArticles(updatedArticles);
+            setAllTags(updatedAllTags);
+            setSelectedTags([newTag.name]);
+
+            // NEUE LOGIK: Prüfen, ob der neue Tag Treffer erzielt hat
+            const matches = updatedArticles.filter(article => article.tags.includes(newTag.name));
+            if (matches.length === 0) {
+                setTagMessage('Could not find tag related news');
+                // Nachricht nach 3 Sekunden ausblenden
+                setTimeout(() => {
+                    setTagMessage('');
+                }, 3000);
+            }
+
+        } catch(err) {
+            console.error("API Call Failed:", err.response || err);
+            alert("Error: Could not add the new tag. Check console (F12) for details.");
+        }
+    };
+    
     const filteredArticles = useMemo(() => {
         if (selectedTags.length === 0) return articles;
         return articles.filter(article => 
@@ -83,13 +104,9 @@ function App() {
                     <p className="mt-2 text-lg text-gray-600 max-w-3xl">This internal dashboard acts as an early-warning system to detect, summarize, and provide context on relevant news for our clients.</p>
                 </div>
                 
-                {/* STABILES ZWEISPALTIGES GRID LAYOUT */}
                 <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-                    
-                    {/* LINKE SPALTE (Nachrichten) */}
                     <div className="lg:col-span-8">
-                       {isLoading && <p>Loading articles...</p>}
-                       {error && <p className="text-red-500">{error}</p>}
+                       {/* ... (Nachrichtenanzeige bleibt unverändert) ... */}
                        {!isLoading && !error && filteredArticles.map(article => (
                            <NewsArticleCard 
                                 key={article.id} 
@@ -98,15 +115,7 @@ function App() {
                                 isDrafting={draftingArticleIds.includes(article.id)}
                             />
                        ))}
-                       {!isLoading && filteredArticles.length === 0 && (
-                           <div className="text-center py-10 bg-white border rounded-lg">
-                               <h3 className="text-xl font-medium text-gray-700">No news articles found.</h3>
-                               <p className="text-gray-500 mt-2">Try adjusting or clearing your tag filters.</p>
-                           </div>
-                       )}
                     </div>
-
-                    {/* RECHTE SPALTE (Sidebar) */}
                     <div className="lg:col-span-4">
                          <div className="sticky top-8 flex flex-col gap-8">
                              <TagFilter 
@@ -115,6 +124,7 @@ function App() {
                                 onTagToggle={handleTagToggle}
                                 onAddNewTag={handleAddNewTag}
                                 onClearFilters={handleClearFilters}
+                                tagMessage={tagMessage} // Die Nachricht als Prop übergeben
                             />
                              <DraftingArea 
                                 articles={articles}
