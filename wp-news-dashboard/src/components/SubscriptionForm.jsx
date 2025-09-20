@@ -53,7 +53,7 @@ const SubscriptionForm = ({ activeTags }) => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="your.email@example.com"
-                        className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-500 focus:border-slate-500 sm:text-sm"
+                        className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-md placeholder-gray-400 focus:outline-none focus:ring-slate-500 focus:border-slate-500 sm:text-sm"
                     />
                 </div>
 
@@ -77,7 +77,7 @@ const SubscriptionForm = ({ activeTags }) => {
                             value={customQuery}
                             onChange={(e) => setCustomQuery(e.target.value)}
                             placeholder="e.g., 'interest rates' or 'Innovate Corp'"
-                            className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-500 focus:border-slate-500 sm:text-sm"
+                            className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-md placeholder-gray-400 focus:outline-none focus:ring-slate-500 focus:border-slate-500 sm:text-sm"
                         />
                     </div>
                 )}
