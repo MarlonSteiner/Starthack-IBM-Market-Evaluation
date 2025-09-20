@@ -125,8 +125,8 @@ function App() {
             <Header />
             <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="text-left mb-10">
-                    <h1 className="text-3xl font-light text-gray-800">Wellershoff & Partners, eine unabhängige Wirtschaftsberatung.</h1>
-                    <p className="mt-2 text-lg text-gray-600 max-w-3xl">This internal dashboard acts as an early-warning system to detect, summarize, and provide context on relevant news for our clients.</p>
+                    <h1 className="text-3xl font-light text-gray-800">Replace at App.jsx.</h1>
+                    <p className="mt-2 text-lg text-gray-600 max-w-3xl">Replace at App.jsx</p>
                 </div>
                 
                 <div className="lg:grid lg:grid-cols-12 lg:gap-8">
