@@ -41,16 +41,16 @@ const NewsArticleCard = ({ article, onToggleDraft, isDrafting }) => {
                     </div>
                 </div>
                 {/* Zwischenüberschriften bleiben auf 'font-medium' (geerbt) */}
-                <p className="text-sm text-slate-500 uppercase tracking-wider mb-2 mt-4">Summary</p>
+                <p className="text-sm text-slate-500 uppercase tracking-wider">Summary</p>
                 {/* Fließtext erbt 'font-medium' */}
-                <p className="text-slate-700 leading-relaxed">{article.summary}</p>
-                <p className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Why it matters</p>
-                <div className="mt- p-2 bg-gray-100 border border-slate-200 rounded-md">
+                <p className="mt-2 p-2 bordertext-slate-700 leading-relaxed">{article.summary}</p>
+                <p className="mt-1 p-1 text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Why it matters</p>
+                <div className="mt-2 p-4 bg-gray-100 border border-slate-200 rounded-md">
                     <p className="text-gray-700 leading-relaxed">{article.context}</p>
                 </div>
                 <div className="mt-4">
                     <p className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Draft Text for Human Review</p>
-                    <div className="bg-gray-100 p-4 border border-gray-200 rounded-md text-gray-800 text-sm leading-relaxed whitespace-pre-wrap font-mono">
+                    <div className="bg-gray-100 p-4 border border-gray-200 rounded-md text-gray-800 leading-relaxed whitespace-pre-wrap">
                         {article.draftText}
                     </div>
                 </div>
