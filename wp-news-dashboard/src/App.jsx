@@ -4,7 +4,7 @@ import axios from 'axios';
 // Die neue Komponente importieren
 import Header from './components/Header';
 import TagFilter from './components/TagFilter';
-import PriorityFilter from './components/PriorityFilter'; // NEU
+import PriorityFilter from './components/PriorityFilter'; 
 import DraftingArea from './components/DraftingArea';
 import NewsArticleCard from './components/NewsArticleCard';
 
@@ -18,12 +18,9 @@ function App() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [tagMessage, setTagMessage] = useState('');
-
-    // NEUER STATE für die Prioritätenfilter
     const [selectedPriorities, setSelectedPriorities] = useState([]);
 
     useEffect(() => {
-        // ... (Datenabruf bleibt unverändert)
         const fetchData = async () => {
             try {
                 const [articlesResponse, tagsResponse] = await Promise.all([
@@ -38,7 +35,6 @@ function App() {
         fetchData();
     }, []);
     
-    // NEUER HANDLER für die Prioritäten
     const handlePriorityToggle = (priority) => {
         setSelectedPriorities(prev =>
             prev.includes(priority)
@@ -55,36 +51,31 @@ function App() {
         );
     };
     
-    const handleClearFilters = () => setSelectedTags([]);
+    const handleClearFilters = () => {
+        setSelectedTags([]);
+        setSelectedPriorities([]);
+    };
 
     const handleAddNewTag = async (tagName) => {
-        // Bestehende Nachrichten löschen, bevor eine neue hinzugefügt wird
         setTagMessage('');
-
         try {
             const response = await axios.post(`${API_BASE_URL}/tags/process`, { name: tagName });
             const { newTag, updatedArticles, allTags: updatedAllTags } = response.data;
-            
             setArticles(updatedArticles);
             setAllTags(updatedAllTags);
             setSelectedTags([newTag.name]);
-
-            // NEUE LOGIK: Prüfen, ob der neue Tag Treffer erzielt hat
             const matches = updatedArticles.filter(article => article.tags.includes(newTag.name));
             if (matches.length === 0) {
                 setTagMessage('Could not find tag related news');
-                // Nachricht nach 3 Sekunden ausblenden
                 setTimeout(() => {
                     setTagMessage('');
                 }, 3000);
             }
-
         } catch(err) {
             console.error("API Call Failed:", err.response || err);
             alert("Error: Could not add the new tag. Check console (F12) for details.");
         }
     };
-
 
     const handleToggleDraft = (articleId) => {
         setDraftingArticleIds(prevIds => 
@@ -98,38 +89,28 @@ function App() {
         setDraftingArticleIds([]);
     };
 
-    // ERWEITERTE FILTERLOGIK
     const filteredArticles = useMemo(() => {
         let tempArticles = articles;
-
-        // 1. Nach Tags filtern
         if (selectedTags.length > 0) {
             tempArticles = tempArticles.filter(article => 
                 article.tags.some(tag => selectedTags.includes(tag))
             );
         }
-
-        // 2. Nach Prioritäten filtern
         if (selectedPriorities.length > 0) {
             tempArticles = tempArticles.filter(article =>
                 selectedPriorities.includes(article.priority)
             );
         }
-
         return tempArticles;
-    }, [articles, selectedTags, selectedPriorities]); // Abhängigkeit hinzugefügt
-
+    }, [articles, selectedTags, selectedPriorities]);
 
     return (
-        <div className="bg-slate-200     min-h-screen font-sans text-slate-900">
+        <div className="bg-slate-50 min-h-screen font-sans text-slate-900">
             <Header />
             <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="text-left mb-10">
-                </div>
                 
                 <div className="lg:grid lg:grid-cols-12 lg:gap-8">
                     <div className="lg:col-span-8">
-                       {/* ... (Nachrichtenanzeige unverändert) ... */}
                        {!isLoading && !error && filteredArticles.map(article => (
                            <NewsArticleCard 
                                 key={article.id} 
@@ -149,7 +130,6 @@ function App() {
                                 onClearFilters={handleClearFilters}
                                 tagMessage={tagMessage}
                             />
-                            {/* NEUE KOMPONENTE HIER EINGEFÜGT */}
                              <PriorityFilter
                                 selectedPriorities={selectedPriorities}
                                 onPriorityToggle={handlePriorityToggle}

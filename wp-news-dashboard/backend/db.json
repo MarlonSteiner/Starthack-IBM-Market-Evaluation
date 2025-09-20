@@ -47,6 +47,14 @@
     {
       "id": 12,
       "name": "iohäohpij"
+    },
+    {
+      "id": 13,
+      "name": "aklisdja"
+    },
+    {
+      "id": 14,
+      "name": "adjustment"
     }
   ],
   "articles": [
@@ -62,7 +70,8 @@
       "draftText": "W&P Flash Note: The Federal Reserve has indicated a significant potential shift in its monetary policy stance due to ongoing inflation. We anticipate a faster tapering of asset purchases.",
       "tags": [
         "Monetary Policy",
-        "Politics"
+        "Politics",
+        "adjustment"
       ]
     },
     {
