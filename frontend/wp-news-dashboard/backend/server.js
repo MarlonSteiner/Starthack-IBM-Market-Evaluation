@@ -7,8 +7,6 @@ import { JSONFile } from 'lowdb/node';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
-import axios from 'axios';
-import { WebClient } from '@slack/web-api';
 
 // --- INITIALISIERUNG ---
 dotenv.config();
@@ -175,105 +173,6 @@ Kombinierter Text:`;
         res.status(500).json({ message: "Fehler bei der Kommunikation mit der OpenAI API." });
     }
 });
-
-
-/* -------------------------------- Slack: Webhook -------------------------------- */
-const { SLACK_WEBHOOK_URL } = process.env;
-if (!SLACK_WEBHOOK_URL) {
-  console.warn('[WARN] SLACK_WEBHOOK_URL is not set; /api/reviews/send will fail.');
-}
-
-app.post('/api/reviews/send', async (req, res) => {
-  try {
-    if (!SLACK_WEBHOOK_URL) return res.status(500).send('Slack webhook not configured');
-
-    const { id, text, sources = [], createdAt } = req.body || {};
-    if (!text) return res.status(400).send('Missing text');
-
-    const body = {
-      text: `*New Review Submitted*\n*ID:* ${id}\n*Created:* ${createdAt || 'n/a'}\n\n${text}`,
-      blocks: [
-        { type: 'header', text: { type: 'plain_text', text: 'New Review Submitted' } },
-        {
-          type: 'section',
-          fields: [
-            { type: 'mrkdwn', text: `*ID:*\n${id}` },
-            { type: 'mrkdwn', text: `*Created:*\n${createdAt || 'n/a'}` },
-          ],
-        },
-        { type: 'divider' },
-        { type: 'section', text: { type: 'mrkdwn', text: text.length > 2900 ? text.slice(0, 2900) + '…' : text } },
-        ...(sources.length
-          ? [
-              { type: 'divider' },
-              { type: 'section', text: { type: 'mrkdwn', text: `*Sources:*\n${sources.map((s) => `• ${s}`).join('\n')}` } },
-            ]
-          : []),
-      ],
-    };
-
-    await axios.post(SLACK_WEBHOOK_URL, body, { headers: { 'Content-Type': 'application/json' } });
-    res.json({ ok: true });
-  } catch (err) {
-    console.error('Slack webhook send failed:', err.response?.data || err.message || err);
-    res.status(500).send('Slack send failed');
-  }
-});
-
-/* ---------------------------- Slack: DM (bot token) ----------------------------- */
-const slackToken = process.env.SLACK_BOT_TOKEN;
-const slackClient = slackToken ? new WebClient(slackToken) : null;
-
-if (!slackToken) {
-  console.warn('[WARN] SLACK_BOT_TOKEN is not set; /api/reviews/sendToMe will fail.');
-}
-app.post('/api/reviews/sendToMe', async (req, res) => {
-  try {
-    const { text = '', sources = [], id, createdAt } = req.body || {};
-    if (!text.trim()) return res.status(400).json({ error: 'Missing text' });
-    if (!slackClient) return res.status(500).json({ error: 'Slack DM not configured' });
-
-    const userId = process.env.SLACK_USER_ID;
-    if (!userId) return res.status(500).json({ error: 'Missing SLACK_USER_ID in env' });
-
-    // 🔧 Format sources for Slack mrkdwn
-    const sourcesLines = (Array.isArray(sources) ? sources : []).map((s) => {
-      if (typeof s === 'string') return `• ${s}`;
-      if (!s || typeof s !== 'object') return '• (unbekannte Quelle)';
-      const name = s.name || s.source || s.title || s.url || 'Quelle';
-      const url  = s.url || s.link;
-      return url ? `• <${url}|${name}>` : `• ${name}`;
-    });
-    const sourcesBlock = sourcesLines.length
-      ? [{
-          type: 'section',
-          text: { type: 'mrkdwn', text: `*Sources:*\n${sourcesLines.join('\n')}` }
-        }]
-      : [];
-
-    const openResp = await slackClient.conversations.open({ users: userId });
-    const dmChannel = openResp?.channel?.id;
-    if (!dmChannel) return res.status(500).json({ error: 'Failed to open DM (check im:write & reinstall app)' });
-
-    await slackClient.chat.postMessage({
-      channel: dmChannel,
-      text: 'New Review',
-      blocks: [
-        { type: 'header', text: { type: 'plain_text', text: 'New Review' } },
-        { type: 'section', text: { type: 'mrkdwn', text: `*ID:* ${id ?? 'n/a'}  •  *Created:* ${createdAt ?? 'n/a'}` } },
-        { type: 'divider' },
-        { type: 'section', text: { type: 'mrkdwn', text: text.length > 2900 ? text.slice(0, 2900) + '…' : text } },
-        ...sourcesBlock,
-      ],
-    });
-
-    res.json({ ok: true, channel: dmChannel });
-  } catch (err) {
-    console.error('Slack DM failed:', err?.data || err?.message || err);
-    res.status(500).json({ error: 'Slack DM failed' });
-  }
-});
-
 
 // --- SERVER START ---
 app.listen(PORT, () => {
