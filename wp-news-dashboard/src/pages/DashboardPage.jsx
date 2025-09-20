@@ -15,9 +15,15 @@ const DashboardPage = ({
     articles, onSendForReview
 }) => {
     return (
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-                <div className="lg:col-span-8">
+        // GEÄNDERT: Diese Container füllen jetzt die von App.jsx vorgegebene Höhe
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full">
+            <div className="lg:grid lg:grid-cols-12 lg:gap-8 h-full">
+                
+                {/* GEÄNDERT: Linke Spalte
+                  - overflow-y-auto: Fügt einen vertikalen Scrollbalken hinzu, wenn der Inhalt zu lang ist.
+                  - pr-4: Fügt etwas Abstand rechts für den Scrollbalken hinzu.
+                */}
+                <div className="lg:col-span-8 overflow-y-auto pr-4">
                     {isLoading && <p>Lade Artikel...</p>}
                     {error && <p className="text-red-500">{error}</p>}
                     {!isLoading && !error && filteredArticles.length > 0 ? (
@@ -33,8 +39,13 @@ const DashboardPage = ({
                         !isLoading && <div className="text-center py-16"><p className="text-slate-500">Keine Artikel entsprechen den aktuellen Filtern.</p></div>
                     )}
                 </div>
-                <div className="lg:col-span-4">
-                    <div className="sticky top-8 flex flex-col gap-8">
+
+                {/* GEÄNDERT: Rechte Spalte
+                  - overflow-y-auto: Macht auch diese Spalte scrollbar.
+                  - Die 'sticky'-Logik wird entfernt, da die Spalte selbst jetzt scrollt.
+                */}
+                <div className="lg:col-span-4 overflow-y-auto pr-2">
+                    <div className="flex flex-col gap-8">
                         <TagFilter
                             allTags={allTags}
                             selectedTags={selectedTags}

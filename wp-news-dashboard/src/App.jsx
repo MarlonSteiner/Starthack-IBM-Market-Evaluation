@@ -20,8 +20,6 @@ function App() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [tagMessage, setTagMessage] = useState('');
-    
-    // Neuer State für die zu überprüfenden Texte, inklusive Quellen
     const [reviewItems, setReviewItems] = useState([]);
 
     // --- DATENLADEN ---
@@ -49,10 +47,10 @@ function App() {
         const newItem = {
             id: Date.now(),
             text: compiledText,
-            sources: sources || [] // Stellt sicher, dass die Quellen gespeichert werden
+            sources: sources || []
         };
         setReviewItems(prevItems => [...prevItems, newItem]);
-        setDraftingArticleIds([]); // Leert die Auswahl im Entwurfsbereich
+        setDraftingArticleIds([]);
     };
 
     const handleApprove = async (itemId, text) => {
@@ -121,7 +119,6 @@ function App() {
         setDraftingArticleIds(prevIds => prevIds.includes(articleId) ? prevIds.filter(id => id !== articleId) : [...prevIds, articleId]);
     };
     
-    // --- GEFILTERTE ARTIKEL (MEMOIZED) ---
     const filteredArticles = useMemo(() => {
         const now = new Date();
         const timeFilterMilliseconds = timeFilterHours * 60 * 60 * 1000;
@@ -135,11 +132,12 @@ function App() {
         });
     }, [articles, selectedTags, selectedPriorities, timeFilterHours]);
 
-    // --- JSX RENDER ---
     return (
-        <div className="bg-slate-50 min-h-screen font-sans text-slate-900">
+        // These classes fix the layout to the screen height for independent scrolling
+        <div className="bg-slate-50 h-screen flex flex-col overflow-hidden">
             <Header reviewCount={reviewItems.length} />
-            <main>
+            {/* This main area fills the remaining space and contains the routes */}
+            <main className="flex-1 overflow-y-hidden">
                 <Routes>
                     <Route
                         path="/"
