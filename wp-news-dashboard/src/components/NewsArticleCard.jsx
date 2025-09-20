@@ -49,15 +49,15 @@ const NewsArticleCard = ({ article, onToggleDraft, isDrafting }) => {
                 {/* Zwischenüberschriften bleiben auf 'font-medium' (geerbt) */}
                 <p className="text-sm text-slate-500 uppercase tracking-wider mt-4 mb-2">Summary</p> {/* Abstand korrigiert */}
                 {/* Fließtext erbt 'font-medium' */}
-                <p className="text-slate-700 leading-relaxed">{article.summary}</p> {/* P-Tag bereinigt */}
+                <p className="text-slate-700 text-sm leading-relaxed">{article.summary}</p> {/* P-Tag bereinigt */}
                 
                 <p className="mt-4 text-sm text-slate-500 uppercase tracking-wider mb-2">Why it matters</p> {/* Abstand korrigiert */}
                 <div className="p-4 bg-slate-50 border border-slate-200 rounded-md"> {/* Hintergrund zu slate-50 */}
-                    <p className="text-slate-700 leading-relaxed">{article.context}</p>
+                    <p className="text-slate-700 text-sm leading-relaxed">{article.context}</p>
                 </div>
                 <div className="mt-4">
                     <p className="text-sm text-slate-500 uppercase tracking-wider mb-2">Draft Text for Human Review</p> {/* Farbe zu slate-500 */}
-                    <div className="bg-slate-100 p-4 border border-slate-200 rounded-md text-slate-800 text-sm leading-relaxed whitespace-pre-wrap font-mono"> {/* Hintergrund und Rand zu slate */}
+                    <div className="bg-slate-100 p-4 border border-slate-200 rounded-md text-slate-800 text-sm leading-relaxed whitespace-pre-wrap"> {/* Hintergrund und Rand zu slate */}
                         {article.draftText}
                     </div>
                 </div>
