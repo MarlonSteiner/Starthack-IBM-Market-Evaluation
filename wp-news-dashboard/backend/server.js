@@ -4,29 +4,27 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { Low } from 'lowdb';
 import { JSONFile } from 'lowdb/node';
-import nodemailer from 'nodemailer'; // NEU
-import dotenv from 'dotenv'; // NEU
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
 
 // --- INITIALISIERUNG ---
-dotenv.config(); // Lade .env-Datei
+dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const file = join(__dirname, 'db.json');
 
 const adapter = new JSONFile(file);
 const db = new Low(adapter, { tags: [], articles: [], subscriptions: [] });
-await db.read(); // Lese DB einmal beim Start
+await db.read();
 
-// NEU: E-Mail Transporter mit Nodemailer konfigurieren
 const transporter = nodemailer.createTransport({
-    service: 'gmail', // oder ein anderer SMTP-Provider
+    service: 'gmail',
     auth: {
         user: process.env.EMAIL_SENDER,
         pass: process.env.EMAIL_PASSWORD,
     },
 });
 
-// NEU: E-Mail-Funktion
 async function sendNotificationEmail(recipient, article) {
     console.log(`Sende E-Mail für Artikel "${article.title}" an ${recipient}...`);
     try {
@@ -35,11 +33,7 @@ async function sendNotificationEmail(recipient, article) {
             to: recipient,
             subject: `MarketRooster Alert: ${article.title}`,
             text: `Ein neuer Artikel passt zu Ihren Kriterien:\n\nTitel: ${article.title}\nQuelle: ${article.source}\nZusammenfassung: ${article.summary}\nLink: ${article.url}`,
-            html: `<p>Ein neuer Artikel passt zu Ihren Kriterien:</p>
-                   <h3>${article.title}</h3>
-                   <p><strong>Quelle:</strong> ${article.source}</p>
-                   <p><strong>Zusammenfassung:</strong> ${article.summary}</p>
-                   <a href="${article.url}">Zum Artikel</a>`,
+            html: `<p>Ein neuer Artikel passt zu Ihren Kriterien:</p><h3>${article.title}</h3><p><strong>Quelle:</strong> ${article.source}</p><p><strong>Zusammenfassung:</strong> ${article.summary}</p><a href="${article.url}">Zum Artikel</a>`,
         });
         console.log(`E-Mail an ${recipient} erfolgreich gesendet.`);
     } catch (error) {
@@ -57,64 +51,89 @@ app.use(express.json());
 app.get('/api/articles', (req, res) => res.json(db.data.articles));
 app.get('/api/tags', (req, res) => res.json(db.data.tags));
 
-// Route zum Speichern von Abonnements
 app.post('/api/subscribe', async (req, res) => {
     try {
         const { email, tags, priorities } = req.body;
         if (!email) return res.status(400).json({ message: 'Email is required.' });
-
+        db.data.subscriptions = db.data.subscriptions || [];
         const { subscriptions } = db.data;
         const newSubscription = {
             id: subscriptions.length > 0 ? Math.max(...subscriptions.map(s => s.id)) + 1 : 1,
-            email,
-            tags,
-            priorities,
-            notifiedArticleIds: [], // NEU: Liste zur Nachverfolgung
+            email, tags, priorities, notifiedArticleIds: [],
         };
         subscriptions.push(newSubscription);
         await db.write();
-
         res.status(201).json({ message: 'Subscription successful!' });
     } catch (error) {
+        console.error("Server error during subscription:", error);
         res.status(500).json({ message: "Server error during subscription." });
     }
 });
 
-// Route zum Verarbeiten von Tags (wird zum E-Mail-Trigger)
+app.post('/api/approved', async (req, res) => {
+    try {
+        const { approvedText } = req.body;
+        if (!approvedText) return res.status(400).json({ message: 'Approved text is required.' });
+        const approvedFile = join(__dirname, 'approved.json');
+        const approvedAdapter = new JSONFile(approvedFile);
+        const approvedDb = new Low(approvedAdapter, []);
+        await approvedDb.read();
+        approvedDb.data = approvedDb.data || [];
+        approvedDb.data.push({
+            id: approvedDb.data.length > 0 ? Math.max(...approvedDb.data.map(item => item.id)) + 1 : 1,
+            text: approvedText,
+            approvedAt: new Date().toISOString()
+        });
+        await approvedDb.write();
+        console.log('[Backend] Neuer Text wurde akzeptiert und gespeichert.');
+        res.status(201).json({ message: 'Text successfully approved and saved.' });
+    } catch (error) {
+        console.error('[Backend] FEHLER beim Speichern des akzeptierten Textes:', error);
+        res.status(500).json({ message: 'Server error while saving approved text.' });
+    }
+});
+
 app.post('/api/tags/process', async (req, res) => {
     try {
-        // ... (Der Code zum Hinzufügen von Tags bleibt gleich)
         const { name: newTagName } = req.body;
         if (!newTagName) return res.status(400).json({ message: 'Tag name is required.' });
         
-        const { tags, articles, subscriptions } = db.data;
-        // ... (Logik zur Tag-Erstellung und Zuweisung)
+        const { tags, articles } = db.data;
+        db.data.subscriptions = db.data.subscriptions || [];
+        const { subscriptions } = db.data;
+        
+        // Tag processing logic here...
+        const searchTerm = newTagName.toLowerCase();
+        const searchRegex = new RegExp(`\\b${searchTerm}\\b`, 'i');
+        const tagExists = tags.some(tag => tag.name.toLowerCase() === searchTerm);
+        if (!tagExists) {
+            tags.push({ id: tags.length > 0 ? Math.max(...tags.map(t => t.id)) + 1 : 1, name: newTagName });
+        }
+        articles.forEach(article => {
+            const content = `${article.title} ${article.summary} ${article.context} ${article.draftText}`;
+            article.tags = article.tags || [];
+            if (searchRegex.test(content) && !article.tags.includes(newTagName)) {
+                article.tags.push(newTagName);
+            }
+        });
 
-        // START: E-MAIL-LOGIK nach der Tag-Verarbeitung
-        console.log("Prüfe auf neue Benachrichtigungen nach Tag-Update...");
-
-        // Die Logik, die prüft, ob ein Artikel passt
+        // Email logic
         const checkMatch = (article, sub) => {
             const priorityMatch = !sub.priorities.length || sub.priorities.includes(article.priority);
             const tagMatch = !sub.tags.length || sub.tags.some(tag => article.tags.includes(tag));
             return priorityMatch && tagMatch;
         };
-        
-        // Gehe durch alle Artikel und Abos
         for (const article of articles) {
             for (const sub of subscriptions) {
                 const hasBeenNotified = sub.notifiedArticleIds.includes(article.id);
                 if (!hasBeenNotified && checkMatch(article, sub)) {
-                    // Match gefunden & noch nicht benachrichtigt!
                     await sendNotificationEmail(sub.email, article);
-                    sub.notifiedArticleIds.push(article.id); // Markiere als benachrichtigt
+                    sub.notifiedArticleIds.push(article.id);
                 }
             }
         }
-        // ENDE: E-MAIL-LOGIK
-
-        await db.write(); // Speichere alle Änderungen (Tags UND 'notifiedArticleIds')
         
+        await db.write();
         res.status(200).json({ updatedArticles: articles, allTags: tags });
     } catch (error) {
         console.error("Error processing tag:", error);
@@ -124,5 +143,5 @@ app.post('/api/tags/process', async (req, res) => {
 
 // --- SERVER START ---
 app.listen(PORT, () => {
-  console.log(`Backend server is running on http://localhost:${3001}`);
+  console.log(`Backend server is running on http://localhost:${PORT}`);
 });

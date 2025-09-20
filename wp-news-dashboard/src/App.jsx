@@ -1,19 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
+import { Routes, Route } from 'react-router-dom';
 
-// Import all of your components
+// Seiten und Komponenten importieren
 import Header from './components/Header';
-import TagFilter from './components/TagFilter';
-import PriorityFilter from './components/PriorityFilter';
-import TimeFilter from './components/TimeFilter';
-import SubscriptionBox from './components/SubscriptionBox';
-import DraftingArea from './components/DraftingArea';
-import NewsArticleCard from './components/NewsArticleCard';
+import DashboardPage from './pages/DashboardPage';
+import ReviewPage from './pages/ReviewPage';
 
 const API_BASE_URL = 'http://localhost:3001/api';
 
 function App() {
-    // All state variables for the application
+    // --- STATES ---
     const [articles, setArticles] = useState([]);
     const [allTags, setAllTags] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
@@ -23,8 +20,11 @@ function App() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [tagMessage, setTagMessage] = useState('');
+    
+    // Neuer State für die zu überprüfenden Texte, inklusive Quellen
+    const [reviewItems, setReviewItems] = useState([]);
 
-    // Effect to fetch initial data from the backend when the app loads
+    // --- DATENLADEN ---
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -44,14 +44,35 @@ function App() {
         fetchData();
     }, []);
 
-    // Handler for the new subscription box
+    // --- HANDLER FÜR REVIEW-PROZESS ---
+    const handleSendForReview = (compiledText, sources) => {
+        const newItem = {
+            id: Date.now(),
+            text: compiledText,
+            sources: sources || [] // Stellt sicher, dass die Quellen gespeichert werden
+        };
+        setReviewItems(prevItems => [...prevItems, newItem]);
+        setDraftingArticleIds([]); // Leert die Auswahl im Entwurfsbereich
+    };
+
+    const handleApprove = async (itemId, text) => {
+        try {
+            await axios.post(`${API_BASE_URL}/approved`, { approvedText: text });
+            setReviewItems(prev => prev.filter(item => item.id !== itemId));
+        } catch (err) {
+            console.error("Failed to save approved text:", err);
+            alert("Fehler: Der akzeptierte Text konnte nicht gespeichert werden.");
+        }
+    };
+
+    const handleReject = (itemId) => {
+        setReviewItems(prev => prev.filter(item => item.id !== itemId));
+    };
+
+    // --- ANDERE HANDLER ---
     const handleSubscribe = async (email) => {
         try {
-            const subscriptionData = {
-                email,
-                tags: selectedTags,
-                priorities: selectedPriorities
-            };
+            const subscriptionData = { email, tags: selectedTags, priorities: selectedPriorities };
             await axios.post(`${API_BASE_URL}/subscribe`, subscriptionData);
         } catch (err) {
             console.error("Subscription failed:", err.response || err);
@@ -59,37 +80,24 @@ function App() {
         }
     };
 
-    // Handler for toggling priority filters
     const handlePriorityToggle = (priority) => {
-        setSelectedPriorities(prev =>
-            prev.includes(priority)
-            ? prev.filter(p => p !== priority)
-            : [...prev, priority]
-        );
+        setSelectedPriorities(prev => prev.includes(priority) ? prev.filter(p => p !== priority) : [...prev, priority]);
     };
 
-    // Handler for the time filter slider
     const handleTimeFilterChange = (hours) => {
         setTimeFilterHours(hours);
     };
 
-    // Handler for toggling tag filters
     const handleTagToggle = (tagName) => {
-        setSelectedTags(prevTags =>
-            prevTags.includes(tagName)
-            ? prevTags.filter(t => t !== tagName)
-            : [...prevTags, tagName]
-        );
+        setSelectedTags(prevTags => prevTags.includes(tagName) ? prevTags.filter(t => t !== tagName) : [...prevTags, tagName]);
     };
     
-    // Handler to clear all active filters
     const handleClearFilters = () => {
         setSelectedTags([]);
         setSelectedPriorities([]);
         setTimeFilterHours(72);
     };
 
-    // Handler to add a new tag and process it on the backend
     const handleAddNewTag = async (tagName) => {
         setTagMessage('');
         try {
@@ -97,17 +105,11 @@ function App() {
             const { updatedArticles, allTags: updatedAllTags } = response.data;
             setArticles(updatedArticles);
             setAllTags(updatedAllTags);
-            setSelectedTags([tagName]); 
-            
-            const matches = updatedArticles.filter(article => 
-                article.tags && article.tags.includes(tagName)
-            );
-            
+            setSelectedTags([tagName]);
+            const matches = updatedArticles.filter(article => article.tags && article.tags.includes(tagName));
             if (matches.length === 0) {
                 setTagMessage('Keine Artikel für diesen Tag gefunden');
-                setTimeout(() => {
-                    setTagMessage('');
-                }, 3000);
+                setTimeout(() => setTagMessage(''), 3000);
             }
         } catch (err) {
             console.error("API Call Failed:", err.response || err);
@@ -115,85 +117,66 @@ function App() {
         }
     };
 
-    // Handler to add or remove an article from the drafting area
     const handleToggleDraft = (articleId) => {
-        setDraftingArticleIds(prevIds =>
-            prevIds.includes(articleId)
-              ? prevIds.filter(id => id !== articleId)
-              : [...prevIds, articleId]
-        );
+        setDraftingArticleIds(prevIds => prevIds.includes(articleId) ? prevIds.filter(id => id !== articleId) : [...prevIds, articleId]);
     };
-
-    // Handler for the "Send for review" button
-    const handleSendForReview = () => {
-        setDraftingArticleIds([]);
-    };
-
-    // Memoized calculation to filter articles based on selected criteria
+    
+    // --- GEFILTERTE ARTIKEL (MEMOIZED) ---
     const filteredArticles = useMemo(() => {
         const now = new Date();
         const timeFilterMilliseconds = timeFilterHours * 60 * 60 * 1000;
         const cutoffDate = new Date(now.getTime() - timeFilterMilliseconds);
-
         return articles.filter(article => {
             const articleDate = new Date(article.datetime);
-            if (articleDate < cutoffDate) {
-                return false;
-            }
+            if (articleDate < cutoffDate) return false;
             const priorityMatch = selectedPriorities.length === 0 || selectedPriorities.includes(article.priority);
             const tagMatch = selectedTags.length === 0 || article.tags.some(tag => selectedTags.includes(tag));
             return priorityMatch && tagMatch;
         });
     }, [articles, selectedTags, selectedPriorities, timeFilterHours]);
 
+    // --- JSX RENDER ---
     return (
         <div className="bg-slate-50 min-h-screen font-sans text-slate-900">
-            <Header />
-            <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-                    <div className="lg:col-span-8">
-                        {isLoading && <p>Lade Artikel...</p>}
-                        {error && <p className="text-red-500">{error}</p>}
-                        {!isLoading && !error && filteredArticles.length > 0 ? (
-                            filteredArticles.map(article => (
-                                <NewsArticleCard 
-                                    key={article.id} 
-                                    article={article} 
-                                    onToggleDraft={handleToggleDraft}
-                                    isDrafting={draftingArticleIds.includes(article.id)}
-                                />
-                            ))
-                        ) : (
-                           !isLoading && <div className="text-center py-16"><p className="text-slate-500">Keine Artikel entsprechen den aktuellen Filtern.</p></div>
-                        )}
-                    </div>
-                    <div className="lg:col-span-4">
-                        <div className="sticky top-8 flex flex-col gap-8">
-                            <TagFilter 
+            <Header reviewCount={reviewItems.length} />
+            <main>
+                <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            <DashboardPage
+                                isLoading={isLoading}
+                                error={error}
+                                filteredArticles={filteredArticles}
+                                onToggleDraft={handleToggleDraft}
+                                draftingArticleIds={draftingArticleIds}
                                 allTags={allTags}
                                 selectedTags={selectedTags}
                                 onTagToggle={handleTagToggle}
                                 onAddNewTag={handleAddNewTag}
                                 onClearFilters={handleClearFilters}
                                 tagMessage={tagMessage}
-                            />
-                            <PriorityFilter
                                 selectedPriorities={selectedPriorities}
                                 onPriorityToggle={handlePriorityToggle}
-                            />
-                            <TimeFilter
-                                hours={timeFilterHours}
-                                onHoursChange={handleTimeFilterChange}
-                            />
-                            <SubscriptionBox onSubscribe={handleSubscribe} />
-                            <DraftingArea 
+                                timeFilterHours={timeFilterHours}
+                                onTimeFilterChange={handleTimeFilterChange}
+                                onSubscribe={handleSubscribe}
                                 articles={articles}
-                                draftingArticleIds={draftingArticleIds}
                                 onSendForReview={handleSendForReview}
                             />
-                        </div>
-                    </div>
-                </div>
+                        }
+                    />
+                    <Route
+                        path="/review"
+                        element={
+                            <ReviewPage
+                                items={reviewItems}
+                                onApprove={handleApprove}
+                                onReject={handleReject}
+                            />
+                        }
+                    />
+                </Routes>
             </main>
         </div>
     );

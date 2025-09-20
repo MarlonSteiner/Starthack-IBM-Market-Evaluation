@@ -11,6 +11,22 @@
     {
       "id": 3,
       "name": "CEO Exit"
+    },
+    {
+      "id": 4,
+      "name": "test"
+    },
+    {
+      "id": 5,
+      "name": "sadasd"
+    },
+    {
+      "id": 6,
+      "name": "asiockasc"
+    },
+    {
+      "id": 7,
+      "name": "asdasd"
     }
   ],
   "articles": [
@@ -120,6 +136,15 @@
         5,
         6
       ]
+    },
+    {
+      "id": 3,
+      "email": "mail@fabiankern.com",
+      "tags": [],
+      "priorities": [
+        "High"
+      ],
+      "notifiedArticleIds": []
     }
   ]
 }
