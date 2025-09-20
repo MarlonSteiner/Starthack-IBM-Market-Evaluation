@@ -31,6 +31,14 @@
     {
       "id": 8,
       "name": "asds"
+    },
+    {
+      "id": 9,
+      "name": "awea"
+    },
+    {
+      "id": 10,
+      "name": "and"
     }
   ],
   "articles": [
@@ -47,7 +55,8 @@
       "tags": [
         "Monetary Policy",
         "Politics",
-        "adjustment"
+        "adjustment",
+        "and"
       ]
     },
     {
@@ -62,7 +71,8 @@
       "draftText": "W&P Market Alert: The unexpected departure of Innovate Corp's CEO introduces significant leadership risk. We anticipate short-term stock price volatility.",
       "tags": [
         "CEO Exit",
-        "Tech"
+        "Tech",
+        "and"
       ]
     },
     {
@@ -78,7 +88,8 @@
       "tags": [
         "Supply Chain",
         "Tech",
-        "Earnings"
+        "Earnings",
+        "and"
       ]
     },
     {
@@ -92,7 +103,8 @@
       "context": "This M&A activity could reshape the competitive landscape of the pharma industry, leading to significant consolidation.",
       "draftText": "W&P M&A Insight: A potential merger between BioHealth and Genetech would be one of the largest in the sector this year, signaling continued consolidation.",
       "tags": [
-        "M&A"
+        "M&A",
+        "and"
       ]
     },
     {
@@ -107,7 +119,8 @@
       "draftText": "W&P Regulatory Note: New EU carbon regulations will create clear winners and losers. Sectors like traditional automaking and steel face headwinds, while green energy stands to benefit.",
       "tags": [
         "Politics",
-        "Supply Chain"
+        "Supply Chain",
+        "and"
       ]
     },
     {
@@ -122,7 +135,8 @@
       "draftText": "W&P Regulatory Note: New EU carbon regulations will create clear winners and losers. Sectors like traditional automaking and steel face headwinds, while green energy stands to benefit.",
       "tags": [
         "Politics",
-        "Supply Chain"
+        "Supply Chain",
+        "and"
       ]
     }
   ],

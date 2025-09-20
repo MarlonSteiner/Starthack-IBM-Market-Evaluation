@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import { Routes, Route } from 'react-router-dom';
 
-// Seiten und Komponenten importieren
 import Header from './components/Header';
 import DashboardPage from './pages/DashboardPage';
 import ReviewPage from './pages/ReviewPage';
@@ -10,7 +9,7 @@ import ReviewPage from './pages/ReviewPage';
 const API_BASE_URL = 'http://localhost:3001/api';
 
 function App() {
-    // --- STATES ---
+    // States
     const [articles, setArticles] = useState([]);
     const [allTags, setAllTags] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
@@ -21,8 +20,9 @@ function App() {
     const [error, setError] = useState(null);
     const [tagMessage, setTagMessage] = useState('');
     const [reviewItems, setReviewItems] = useState([]);
+    const [compiledDraft, setCompiledDraft] = useState('');
 
-    // --- DATENLADEN ---
+    // Datenladen
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -42,17 +42,41 @@ function App() {
         fetchData();
     }, []);
 
-    // --- HANDLER FÜR REVIEW-PROZESS ---
-    const handleSendForReview = (compiledText, sources) => {
-        const newItem = {
-            id: Date.now(),
-            text: compiledText,
-            sources: sources || []
-        };
-        setReviewItems(prevItems => [...prevItems, newItem]);
-        setDraftingArticleIds([]);
+    // Handler für das Hinzufügen/Entfernen zum Entwurf mit KI
+    const handleToggleDraft = async (articleId) => {
+        const isAdding = !draftingArticleIds.includes(articleId);
+        const currentDraftingIds = draftingArticleIds;
+
+        const newDraftingIds = isAdding
+            ? [...currentDraftingIds, articleId]
+            : currentDraftingIds.filter(id => id !== articleId);
+        setDraftingArticleIds(newDraftingIds);
+
+        if (isAdding) {
+            const newText = articles.find(a => a.id === articleId)?.draftText || '';
+            const existingText = compiledDraft;
+            try {
+                const response = await axios.post(`${API_BASE_URL}/draft/combine`, { existingText, newText });
+                setCompiledDraft(response.data.combinedText);
+            } catch (error) {
+                console.error("Fehler bei der Textkombination:", error);
+                alert("Der Text konnte nicht per KI kombiniert werden. Bitte versuchen Sie es erneut.");
+                setDraftingArticleIds(currentDraftingIds);
+            }
+        } else {
+            const remainingArticles = articles.filter(a => newDraftingIds.includes(a.id));
+            const newCompiledText = remainingArticles.map(a => a.draftText).join('\n\n---\n\n');
+            setCompiledDraft(newCompiledText);
+        }
     };
 
+    // Handler für den Überprüfungsprozess
+    const handleSendForReview = (compiledText, sources) => {
+        const newItem = { id: Date.now(), text: compiledText, sources: sources || [] };
+        setReviewItems(prevItems => [...prevItems, newItem]);
+        setDraftingArticleIds([]);
+        setCompiledDraft('');
+    };
     const handleApprove = async (itemId, text) => {
         try {
             await axios.post(`${API_BASE_URL}/approved`, { approvedText: text });
@@ -62,40 +86,24 @@ function App() {
             alert("Fehler: Der akzeptierte Text konnte nicht gespeichert werden.");
         }
     };
-
-    const handleReject = (itemId) => {
-        setReviewItems(prev => prev.filter(item => item.id !== itemId));
-    };
-
-    // --- ANDERE HANDLER ---
+    const handleReject = (itemId) => { setReviewItems(prev => prev.filter(item => item.id !== itemId)); };
+    
+    // Vollständiger Handler für das Abonnieren
     const handleSubscribe = async (email) => {
         try {
-            const subscriptionData = { email, tags: selectedTags, priorities: selectedPriorities };
+            const subscriptionData = {
+                email,
+                tags: selectedTags,
+                priorities: selectedPriorities
+            };
             await axios.post(`${API_BASE_URL}/subscribe`, subscriptionData);
         } catch (err) {
             console.error("Subscription failed:", err.response || err);
             alert("Fehler: Abonnement konnte nicht gespeichert werden.");
         }
     };
-
-    const handlePriorityToggle = (priority) => {
-        setSelectedPriorities(prev => prev.includes(priority) ? prev.filter(p => p !== priority) : [...prev, priority]);
-    };
-
-    const handleTimeFilterChange = (hours) => {
-        setTimeFilterHours(hours);
-    };
-
-    const handleTagToggle = (tagName) => {
-        setSelectedTags(prevTags => prevTags.includes(tagName) ? prevTags.filter(t => t !== tagName) : [...prevTags, tagName]);
-    };
     
-    const handleClearFilters = () => {
-        setSelectedTags([]);
-        setSelectedPriorities([]);
-        setTimeFilterHours(72);
-    };
-
+    // Vollständiger Handler für das Hinzufügen neuer Tags
     const handleAddNewTag = async (tagName) => {
         setTagMessage('');
         try {
@@ -115,10 +123,13 @@ function App() {
         }
     };
 
-    const handleToggleDraft = (articleId) => {
-        setDraftingArticleIds(prevIds => prevIds.includes(articleId) ? prevIds.filter(id => id !== articleId) : [...prevIds, articleId]);
-    };
+    // Andere Filter-Handler
+    const handlePriorityToggle = (priority) => { setSelectedPriorities(prev => prev.includes(priority) ? prev.filter(p => p !== priority) : [...prev, priority]); };
+    const handleTimeFilterChange = (hours) => { setTimeFilterHours(hours); };
+    const handleTagToggle = (tagName) => { setSelectedTags(prevTags => prevTags.includes(tagName) ? prevTags.filter(t => t !== tagName) : [...prevTags, tagName]); };
+    const handleClearFilters = () => { setSelectedTags([]); setSelectedPriorities([]); setTimeFilterHours(72); };
     
+    // Memoized Artikel-Filterung
     const filteredArticles = useMemo(() => {
         const now = new Date();
         const timeFilterMilliseconds = timeFilterHours * 60 * 60 * 1000;
@@ -135,43 +146,27 @@ function App() {
     return (
         <div className="bg-slate-200 h-screen flex flex-col overflow-hidden">
             <Header reviewCount={reviewItems.length} />
-            {/* HIER IST DIE ÄNDERUNG: pt-8 fügt den Abstand zum Header hinzu */}
             <main className="flex-1 overflow-y-hidden pt-8">
                 <Routes>
                     <Route
                         path="/"
                         element={
                             <DashboardPage
-                                isLoading={isLoading}
-                                error={error}
-                                filteredArticles={filteredArticles}
-                                onToggleDraft={handleToggleDraft}
-                                draftingArticleIds={draftingArticleIds}
-                                allTags={allTags}
-                                selectedTags={selectedTags}
-                                onTagToggle={handleTagToggle}
-                                onAddNewTag={handleAddNewTag}
-                                onClearFilters={handleClearFilters}
-                                tagMessage={tagMessage}
-                                selectedPriorities={selectedPriorities}
-                                onPriorityToggle={handlePriorityToggle}
-                                timeFilterHours={timeFilterHours}
-                                onTimeFilterChange={handleTimeFilterChange}
-                                onSubscribe={handleSubscribe}
-                                articles={articles}
-                                onSendForReview={handleSendForReview}
+                                isLoading={isLoading} error={error} filteredArticles={filteredArticles}
+                                onToggleDraft={handleToggleDraft} draftingArticleIds={draftingArticleIds}
+                                allTags={allTags} selectedTags={selectedTags} onTagToggle={handleTagToggle}
+                                onAddNewTag={handleAddNewTag} onClearFilters={handleClearFilters}
+                                tagMessage={tagMessage} selectedPriorities={selectedPriorities}
+                                onPriorityToggle={handlePriorityToggle} timeFilterHours={timeFilterHours}
+                                onTimeFilterChange={handleTimeFilterChange} onSubscribe={handleSubscribe}
+                                articles={articles} onSendForReview={handleSendForReview}
+                                compiledDraft={compiledDraft} setCompiledDraft={setCompiledDraft}
                             />
                         }
                     />
                     <Route
                         path="/review"
-                        element={
-                            <ReviewPage
-                                items={reviewItems}
-                                onApprove={handleApprove}
-                                onReject={handleReject}
-                            />
-                        }
+                        element={<ReviewPage items={reviewItems} onApprove={handleApprove} onReject={handleReject} />}
                     />
                 </Routes>
             </main>

@@ -6,17 +6,23 @@ import { Low } from 'lowdb';
 import { JSONFile } from 'lowdb/node';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
+import OpenAI from 'openai';
 
 // --- INITIALISIERUNG ---
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const file = join(__dirname, 'db.json');
-
 const adapter = new JSONFile(file);
 const db = new Low(adapter, { tags: [], articles: [], subscriptions: [] });
 await db.read();
 
+// OpenAI-Client initialisieren
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
+
+// Nodemailer Transporter
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -97,12 +103,9 @@ app.post('/api/tags/process', async (req, res) => {
     try {
         const { name: newTagName } = req.body;
         if (!newTagName) return res.status(400).json({ message: 'Tag name is required.' });
-        
         const { tags, articles } = db.data;
         db.data.subscriptions = db.data.subscriptions || [];
         const { subscriptions } = db.data;
-        
-        // Tag processing logic here...
         const searchTerm = newTagName.toLowerCase();
         const searchRegex = new RegExp(`\\b${searchTerm}\\b`, 'i');
         const tagExists = tags.some(tag => tag.name.toLowerCase() === searchTerm);
@@ -116,8 +119,6 @@ app.post('/api/tags/process', async (req, res) => {
                 article.tags.push(newTagName);
             }
         });
-
-        // Email logic
         const checkMatch = (article, sub) => {
             const priorityMatch = !sub.priorities.length || sub.priorities.includes(article.priority);
             const tagMatch = !sub.tags.length || sub.tags.some(tag => article.tags.includes(tag));
@@ -132,12 +133,44 @@ app.post('/api/tags/process', async (req, res) => {
                 }
             }
         }
-        
         await db.write();
         res.status(200).json({ updatedArticles: articles, allTags: tags });
     } catch (error) {
         console.error("Error processing tag:", error);
         res.status(500).json({ message: "Server error while processing tag." });
+    }
+});
+
+app.post('/api/draft/combine', async (req, res) => {
+    const { existingText, newText } = req.body;
+    if (!existingText) {
+        return res.json({ combinedText: newText });
+    }
+    const prompt = `Du bist ein professioneller Redakteur. Deine Aufgabe ist es, zwei Textabschnitte zu einem einzigen, flüssigen und kohärenten Text zu verschmelzen. Kombiniere die Kernaussagen, vermeide Wiederholungen und sorge für einen natürlichen Lesefluss. Gib NUR den finalen, kombinierten Text zurück, ohne jegliche Einleitung, Kommentare oder Anführungszeichen.
+
+Bestehender Text:
+---
+${existingText}
+---
+
+Neuer Text, der hinzugefügt werden soll:
+---
+${newText}
+---
+
+Kombinierter Text:`;
+
+    try {
+        const completion = await openai.chat.completions.create({
+            model: "gpt-3.5-turbo",
+            messages: [{ role: "user", content: prompt }],
+            temperature: 0.5,
+        });
+        const combinedText = completion.choices[0].message.content.trim();
+        res.json({ combinedText });
+    } catch (error) {
+        console.error("Fehler bei der OpenAI API-Anfrage:", error);
+        res.status(500).json({ message: "Fehler bei der Kommunikation mit der OpenAI API." });
     }
 });
 
