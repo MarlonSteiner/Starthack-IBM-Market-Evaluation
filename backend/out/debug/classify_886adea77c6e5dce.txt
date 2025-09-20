@@ -1,9 +1,0 @@
-
-
-{
-  "event_type": "ceo_exit",
-  "tickers": ["0001771995"],
-  "sectors": ["Entertainment"],
-  "asset_classes": ["Equity"],
-  "regions": ["n/a"],
-  "confidence

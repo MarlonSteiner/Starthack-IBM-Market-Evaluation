@@ -1,9 +1,0 @@
-YT=RR
-
-OUTPUT:
-{
-  "headline": "10-year Treasury yield hits 2-week high despite Fed rate cut",
-  "bullets": [
-    "U.S. 10-year Treasury yield climbed to 2-week peak",
-    "Fed cut rates for first time in 2023, but yield increased",
-    "Investors assess U.S. economy, future mon

@@ -1,9 +1,0 @@
-
-
-AUSGABE
-{
-  "headline": "Fed Governor Miran: No Pressure from Trump on Rate Decision",
-  "bullets": [
-    "Fed Governor Stephen Miran spoke to CNBC, denying any pressure from Trump on this week's rate decision.",
-    "Miran's brief conversation with Trump did not influence his voting stance.",
-    "No details on Miran's voting decision were

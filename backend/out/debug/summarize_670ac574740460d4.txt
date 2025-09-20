@@ -1,9 +1,0 @@
-
-
-AUSGABE
-{
-  "headline": "Paramount Skydance bids $22-$24/share for Warner Bros. Discovery",
-  "bullets": [
-    "Paramount Skydance prepares bid for Warner Bros. Discovery.",
-    "Offer could range from $22 to $24 per share, 70-80% cash, backed by Larry Ellison.",
-   

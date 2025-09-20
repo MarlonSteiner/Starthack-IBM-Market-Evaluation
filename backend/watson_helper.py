@@ -24,7 +24,7 @@ else:
 
 # ---- Environment (set these in your shell; do NOT hard-code secrets) ----
 WATSONX_API_KEY    = os.getenv("WATSONX_API_KEY", "")
-WATSONX_BASE_URL   = os.getenv("WATSONX_BASE_URL", "https://eu-de.ml.cloud.ibm.com")
+WATSONX_BASE_URL   = os.getenv("WATSONX_BASE_URL", "https://us-south.ml.cloud.ibm.com")
 
 # Use ONE of these contexts:
 WATSONX_PROJECT_ID = os.getenv("WATSONX_PROJECT_ID", "")  # for ad-hoc foundation inference

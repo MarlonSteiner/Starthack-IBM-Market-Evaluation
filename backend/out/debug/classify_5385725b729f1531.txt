@@ -1,9 +1,0 @@
-
-
-{
-  "event_type": "other_events",
-  "tickers": ["STUBH", "NYSE"],
-  "sectors": ["Consumer Discretionary"],
-  "asset_classes": ["Equity"],
-  "regions": ["US"],
-  "confidence": 0.

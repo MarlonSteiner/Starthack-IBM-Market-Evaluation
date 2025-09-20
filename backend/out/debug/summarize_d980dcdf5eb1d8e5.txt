@@ -1,9 +1,0 @@
-INUM
-
-OUTPUT:
-{
-  "headline": "American Express Platinum Card Annual Fee Increases by $443",
-  "bullets": [
-    "American Express raises annual fee for Platinum card by $443 to $695.",
-    "Card now includes additional benefits, such as Uber VIP access and hotel elite status.",
-    "Decision to pay higher fee depends on individual usage and value of per

@@ -1,9 +1,0 @@
-
-COMPANY: MBIA Inc.
-
-OUTPUT:
-{
-  "headline": "MBIA Inc. 30-year mortgage rate rises post-Fed rate cut",
-  "bullets": [
-    "MBIA Inc. operates in the insurance sector, focusing on mortgage-backed securities.",
-    "30-year mortgage rate surged by 25 basis points the day after Fed's 25

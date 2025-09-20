@@ -463,8 +463,8 @@ Nur JSON ausgeben, keine Prosa.
     except Exception:
         return out
 
-MAX_CLASSIFY  = 20  # cap LLM classify for testing
-MAX_SUMMARIZE = 20  # cap LLM summarize for testing
+MAX_CLASSIFY  = 100  # cap LLM classify for testing
+MAX_SUMMARIZE = 100  # cap LLM summarize for testing
 
 WHY_DEFAULTS = {
     "ceo_exit": "Führungswechsel kann Strategie und Guidance verschieben; Nachfolge und Marktreaktion beobachten.",
@@ -761,7 +761,7 @@ from datetime import datetime
 def _ts():
     return datetime.now().strftime("%H:%M:%S")
 
-def process(min_score: float = 0.4, with_llm: bool = True, ml_weight: float = 0.3) -> Dict[str, Any]:
+def process(min_score: float = 0.2, with_llm: bool = True, ml_weight: float = 0.3) -> Dict[str, Any]:
     """
     Pipeline:
       1) Fetch → dedupe → enrich → pre-score (heuristic)
@@ -1397,7 +1397,7 @@ def ensure_de_fields(items: List[Dict[str, Any]]) -> None:
 
 
 if __name__ == "__main__":
-    out = process(min_score=0.4, with_llm=True)
+    out = process(min_score=0.2, with_llm=True)
     c = out["counts"]
     print(f"LLM classify: {c['classified']} items; fallbacks: {c['classify_fallback']}")
     print(f"LLM summarize: {c['summarized']} items; fallbacks: {c['summarize_fallback']}")

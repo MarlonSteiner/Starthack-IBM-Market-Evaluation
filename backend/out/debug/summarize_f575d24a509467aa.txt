@@ -1,8 +1,0 @@
- #US5381031053
-
-AUSGABE
-{
-  "headline": "Walmart Marketplace Fraud: Lax Vetting Leads to Identity Theft, Fakes",
-  "bullets": [
-    "Walmart's marketplace sales surge, but fraud and fakes rise due to lax vetting.",
-    "CNBC investigation uncovers identity theft, counterfeit products

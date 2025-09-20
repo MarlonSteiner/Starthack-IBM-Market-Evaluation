@@ -1,9 +1,0 @@
-
-
-AUSGABE
-{
-  "headline": "Retailers use tariff arbitrage to mitigate trade war impact",
-  "bullets": [
-    "Retailers employ tariff arbitrage in supply chains, lowering tariff bills.",
-    "Strategy spans luxury to mass-market goods, keeping consumer prices down.",
-    "Geopolitical tensions drive tariff adjustments, impacting supply chains."

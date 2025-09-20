@@ -1,9 +1,0 @@
-
-
-{
-  "event_type": "other_events",
-  "tickers": ["PARAM", "SKYD", "WARR", "DISC"],
-  "sectors": ["Media"],
-  "asset_classes": ["Equity"],
-  "regions": ["US"],
-  "confidence": 

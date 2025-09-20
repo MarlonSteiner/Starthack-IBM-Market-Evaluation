@@ -1,7 +1,0 @@
-
-
-{
-  "event_type": "sector_shock",
-  "tickers": ["DE35", "DE000A16D50"],
-  "sectors": ["Industrials", "Consumer Cyclical"],
-  "asset_classes": ["Equity

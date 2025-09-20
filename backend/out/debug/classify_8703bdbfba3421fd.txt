@@ -1,9 +1,0 @@
-
-
-{
-  "event_type": "ceo_exit",
-  "tickers": ["MGM"],
-  "sectors": ["Leisure", "Hospitality"],
-  "asset_classes": ["Equity"],
-  "regions": ["US"],
-  "confidence": 1.0

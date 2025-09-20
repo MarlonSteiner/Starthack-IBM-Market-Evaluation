@@ -1,7 +1,0 @@
-.N, #USDR
-
-AUSGABE
-{
-  "headline": "Kashkari: Mindestens zwei weitere Zinssenkungen in 2019",
-  "bullets": [
-    "Minneapolis Fed-Präsident Neel Kashkari erwartet, dass Trumps Tarife keine langfristige Belastung für die Inflation darstellen.",

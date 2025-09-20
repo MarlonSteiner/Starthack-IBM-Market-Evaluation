@@ -1,9 +1,0 @@
-
-
-{
-  "event_type": "mna",
-  "tickers": ["0001463208"],
-  "sectors": ["Transportation & Logistics"],
-  "asset_classes": ["Equity"],
-  "regions": ["n/a"],
-  "confidence

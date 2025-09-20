@@ -1,9 +1,0 @@
-
-
-OUTPUT:
-{
-  "headline": "Sensient Technologies CEO, John Van Sinderen, Departs; COO, Jason Bergman, Appointed CEO",
-  "bullets": [
-    "John Van Sinderen, CEO of Sensient Technologies, has departed.",
-    "Jason Bergman, COO, has been appointed as the new CEO.",
-    "The change is effective

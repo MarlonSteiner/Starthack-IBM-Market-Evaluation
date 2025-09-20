@@ -1,9 +1,0 @@
-
-
-{
-  "event_type": "ceo_exit",
-  "tickers": ["BRC Inc.", "0001891101"],
-  "sectors": ["Financial Services"],
-  "asset_classes": ["Equity"],
-  "regions": ["US"],
- 

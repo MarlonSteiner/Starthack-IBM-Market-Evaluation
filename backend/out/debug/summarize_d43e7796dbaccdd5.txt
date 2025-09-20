@@ -1,9 +1,0 @@
-.US
-
-OUTPUT
-{
-  "headline": "Tepper: Fed may cut rates further, but risks 'danger territory'",
-  "bullets": [
-    "Hedge fund billionaire David Tepper comments on Fed policy",
-    "Fed lowered rates by 0.25% Wednesday, signaling two more cuts this year",
-    "Tepper warns of inflation risks if Fed eases too much

@@ -1,9 +1,0 @@
-
-
-OUTPUT:
-{
-  "headline": "Sound Financial Bancorp CEO Departs; New Officer Appointed",
-  "bullets": [
-    "CEO of Sound Financial Bancorp, Inc. (0001541119) has departed.",
-    "New officer appointed following CEO's exit.",
-    "8-K filing includes Item 5.02 and 9

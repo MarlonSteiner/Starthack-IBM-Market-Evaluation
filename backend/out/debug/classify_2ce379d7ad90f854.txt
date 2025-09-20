@@ -1,6 +1,0 @@
-
-
-{
-  "event_type": "other_events",
-  "tickers": ["NASDAQ:FB", "NASDAQ:MSFT", "NYSE:AAPL", "NYSE:GOOGL", "NASDAQ:AMZN"],
-  "sectors

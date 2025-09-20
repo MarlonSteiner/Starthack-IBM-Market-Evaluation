@@ -1,9 +1,0 @@
-
-
-{
-  "event_type": "ceo_exit",
-  "tickers": ["0001851484"],
-  "sectors": ["Healthcare"],
-  "asset_classes": ["Equity"],
-  "regions": ["US"],
-  "confidence": 1

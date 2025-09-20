@@ -1,8 +1,0 @@
-
-
-AUSGABE
-{
-  "headline": "Netskope IPO: Shares open at $23, up 25%+ on first day",
-  "bullets": [
-    "Netskope, a cybersecurity software provider, debuts on Nasdaq, pricing shares at top of range.",
-    "Shares open at $23, up more than 25% from the IPO price.",

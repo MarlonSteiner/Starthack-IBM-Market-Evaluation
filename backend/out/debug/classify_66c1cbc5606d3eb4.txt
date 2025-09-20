@@ -1,8 +1,0 @@
-
-
-{
-  "event_type": "other_events",
-  "tickers": ["GBTC", "ETH", "XRP", "SOL", "ADA"],
-  "sectors": ["Crypto", "Blockchain"],
-  "asset_classes": ["Equity"],
-  "regions": ["US"],

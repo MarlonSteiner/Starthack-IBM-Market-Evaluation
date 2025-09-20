@@ -1,9 +1,0 @@
-
-
-{
-  "event_type": "ceo_exit",
-  "tickers": ["0001541119"],
-  "sectors": ["Financials"],
-  "asset_classes": ["Equity"],
-  "regions": ["US"],
-  "confidence": 1

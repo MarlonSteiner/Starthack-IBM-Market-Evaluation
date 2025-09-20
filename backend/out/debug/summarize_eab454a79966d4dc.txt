@@ -1,9 +1,0 @@
-
-
-OUTPUT:
-{
-  "headline": "Rayonier Advanced Materials CEO Departs; New Officer Appointed",
-  "bullets": [
-    "Rayonier Advanced Materials CEO, John, resigns effective 2025-09-19.",
-    "Board appoints COO, Jane, as interim CEO.",
-    "Compensatory arrangements for new CEO not disclosed."

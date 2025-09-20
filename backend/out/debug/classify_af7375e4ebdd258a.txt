@@ -1,9 +1,0 @@
-
-
-{
-  "event_type": "ceo_exit",
-  "tickers": ["SENSIENT TECHNOLOGIES CORP"],
-  "sectors": ["Consumer Staples"],
-  "asset_classes": ["Equity"],
-  "regions": ["US"],
-  "confidence

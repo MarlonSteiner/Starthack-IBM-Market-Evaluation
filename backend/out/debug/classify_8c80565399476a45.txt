@@ -1,9 +1,0 @@
-
-
-{
-  "event_type": "ceo_exit",
-  "tickers": ["NASDAQ:FB"],
-  "sectors": ["Technology"],
-  "asset_classes": ["Equity"],
-  "regions": ["US"],
-  "confidence": 0.95

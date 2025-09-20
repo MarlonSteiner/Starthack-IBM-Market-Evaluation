@@ -1,9 +1,0 @@
-
-
-OUTPUT:
-{
-  "headline": "BRC Inc. CEO Exits, Appoints New Officers; Financials Filed",
-  "bullets": [
-    "CEO exit announced in 8-K/A filing on 2025-09-19.",
-    "New officers appointed, compensatory arrangements disclosed.",
-    "Financial statements and exhibits filed alongside the
