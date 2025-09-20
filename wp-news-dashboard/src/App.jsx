@@ -121,13 +121,9 @@ function App() {
 
 
     return (
-        <div className="bg-gray-50 min-h-screen font-sans text-gray-900">
+        <div className="bg-gray-200 min-h-screen font-sans text-gray-900">
             <Header />
             <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="text-left mb-10">
-                    <h1 className="text-3xl font-light text-gray-800">Replace at App.jsx.</h1>
-                    <p className="mt-2 text-lg text-gray-600 max-w-3xl">Replace at App.jsx</p>
-                </div>
                 
                 <div className="lg:grid lg:grid-cols-12 lg:gap-8">
                     <div className="lg:col-span-8">
