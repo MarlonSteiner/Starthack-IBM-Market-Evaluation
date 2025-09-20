@@ -1,0 +1,7 @@
+:US
+
+AUSGABE
+{
+  "headline": "CrowdStrike: Aktienkurs steigt um 12% aufgrund positiver langfristiger Aussichten",
+  "bullets": [
+    "Cybersecurity-Firma CrowdStrike teilte starke langfristige Aussichten mit und kündigte den Kauf des AI-Sicherheitsuntern

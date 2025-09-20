@@ -1,0 +1,9 @@
+:COM=
+
+AUSGABE
+{
+  "headline": "Oil prices dip on supply, demand concerns, Fed rate cut fails to boost consumption",
+  "bullets": [
+    "Oil prices fell on Friday, influenced by concerns over abundant supplies and decreasing demand.",
+    "The Federal Reserve's first rate cut of the year did not stimulate consumption as anticipated.",
+    "Market participants await further

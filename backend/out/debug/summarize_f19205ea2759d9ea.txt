@@ -1,0 +1,11 @@
+
+
+OUTPUT:
+{
+  "headline": "Bannon suggests Bessent for dual Treasury-Fed role",
+  "bullets": [
+    "White House advisor Steve Bannon proposes dual Treasury-Fed role for Bessent.",
+    "Bannon suggests Bessent could lead both institutions simultaneously.",
+    "No official response from Treasury or Fed."
+  ],
+  "why_it_matters": "Unclear

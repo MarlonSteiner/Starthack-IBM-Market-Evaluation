@@ -1,0 +1,8 @@
+
+
+OUTPUT:
+{
+  "headline": "CITIUS ONCOLOGY CEO Exits; Unregistered Equity Sales Reported",
+  "bullets": [
+    "CITIUS ONCOLOGY, INC. (0001851484) filed an 8-K on 2025-09-19, reporting CEO's exit.",
+    "The filing includes unregistered sales of

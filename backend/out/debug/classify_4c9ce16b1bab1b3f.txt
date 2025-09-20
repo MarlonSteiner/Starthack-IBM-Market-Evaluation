@@ -1,0 +1,9 @@
+
+
+{
+  "event_type": "earnings_surprise",
+  "tickers": ["AAPL", "GOOGL", "MSFT"],
+  "sectors": ["Technology"],
+  "asset_classes": ["Equity"],
+  "regions": ["US"],
+  "confidence":

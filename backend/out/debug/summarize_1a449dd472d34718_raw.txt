@@ -1,0 +1,11 @@
+TYPE=str
+
+
+
+OUTPUT
+{
+  "headline": "Microbot Medical CEO Departs; New CFO Appointed",
+  "bullets": [
+    "Microbot Medical's CEO, Yakir Arnon, resigned effective 2025-09-18.",
+    "New CFO, David Malka, appointed to replace Arnon.",
+    "Arnon's departure signals a shift in leadership strategy."

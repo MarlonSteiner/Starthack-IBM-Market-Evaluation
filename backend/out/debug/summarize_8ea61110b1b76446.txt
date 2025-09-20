@@ -1,0 +1,11 @@
+
+
+OUTPUT:
+{
+  "headline": "Oracle CEO Larry Ellison's wealth management strategy",
+  "bullets": [
+    "Larry Ellison, Oracle's CEO, amassed $365 billion fortune via leverage and risk",
+    "Borrowed against shares, raised cash without relinquishing control",
+    "Unconventional approach contrasts with traditional wealth management"
+  ],
+  "why_it_

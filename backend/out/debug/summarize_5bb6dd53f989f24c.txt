@@ -1,0 +1,11 @@
+
+
+AUSGABE
+{
+  "headline": "Fed cuts rate by 25 bp, aligning with White House stance",
+  "bullets": [
+    "Federal Reserve reduces key borrowing rate by 25 basis points.",
+    "White House, via NEC Director Kevin Hassett, signals approval.",
+    "Hassett had advocated for a larger cut."
+  ],
+  "why_it_

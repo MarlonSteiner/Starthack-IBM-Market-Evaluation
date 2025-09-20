@@ -1,0 +1,9 @@
+
+
+OUTPUT:
+{
+  "headline": "Fly-E Group, Inc. CEO Departs; New Officer Appointed",
+  "bullets": [
+    "CEO of Fly-E Group, Inc. (0001975940) has departed.",
+    "New officer appointed following CEO's exit.",
+    "8-K filing includes Item 5.02 and 9.

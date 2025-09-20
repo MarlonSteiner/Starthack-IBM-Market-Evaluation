@@ -1,0 +1,11 @@
+.L
+
+OUTPUT:
+{
+  "headline": "Deliveroo CEO Will Shu to resign",
+  "bullets": [
+    "Deliveroo founder Will Shu to step down as CEO",
+    "Shu co-founded Deliveroo in 2013 with Greg Orlowski",
+    "Resignation follows DoorDash's acquisition of a stake in Deliveroo"
+  ],
+  "why_it

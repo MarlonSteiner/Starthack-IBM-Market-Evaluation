@@ -1,0 +1,10 @@
+
+
+OUTPUT:
+{
+  "headline": "Janux Therapeutics CEO Departs; New Officer Appointed",
+  "bullets": [
+    "Janux Therapeutics' CEO, [Name], has departed.",
+    "The company has appointed [New Officer's Name] as the new CEO.",
+    "The change is part of compensatory arrangements for certain officers."
+  ],

@@ -1,0 +1,7 @@
+
+
+OUTPUT:
+{
+  "headline": "Notion übertrifft Erwartungen bei Umsatz, aber Microsoft-Konkurrenz bedroht AI-Wachstum",
+  "bullets": [
+    "Notion, ein Wettbewerber von Google und Microsoft in Produktivitäts-Software, erzielte 500 Millionen US-Dollar an jährlichem

@@ -1,0 +1,11 @@
+TYPE=str
+
+
+
+OUTPUT
+{
+  "headline": "Sensient Technologies CEO, John Van Sinderen, to Step Down",
+  "bullets": [
+    "John Van Sinderen, CEO of Sensient Technologies, will step down on 31 December 2025.",
+    "The company's board of directors has appointed COO, Amit Chadha, as the new CEO.",
+    "Van Sinder
