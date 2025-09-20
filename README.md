@@ -1,86 +1,56 @@
-MarketPulse Lite
+# Financial News Ingestor (EDGAR + MarketAux + NewsAPI)
 
-One-liner:
-A prototype tool that detects market-moving financial news, summarizes it, and tailors insights to specific bank clients. It helps IBM teams deliver faster, smarter pitches.
+A minimal FastAPI service that exposes a single `/ingest` endpoint to pull fresh items from:
+- **SEC EDGAR Atom RSS** (8-K, 10-Q, 10-K)
+- **MarketAux** news API (requires API token)
+- **NewsAPI** (requires API key)
 
-Alternatives if you want shorter:
+All results are normalized to a unified schema and deduplicated.
 
-Detect, summarize, and package market-moving news for client-ready briefs.
+## Quickstart
 
-Hourly news in, three-line insights out, weekly brief ready to send.
+1) Create a virtual env and install deps:
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
 
-Use case
-Who is the user
+2) Copy env example and add your keys:
+```bash
+cp .env.example .env
+# Fill MARKETAUX_API_TOKEN and NEWSAPI_API_KEY
+```
 
-Primary: Relationship Manager or Investment Advisor at a Swiss wealth or asset manager
-Goal: brief clients with credible, recent insights and share a weekly “Current Perspectives” summary with minimal effort.
+3) Run the API:
+```bash
+./run.sh
+# or: uvicorn app.main:app --reload
+```
 
-Secondary: Research Analyst or PM
-Goal: curate incoming items, edit tone, approve content, ensure compliance.
+4) Call the endpoint:
+```bash
+curl -X POST http://localhost:8000/ingest | jq
+```
 
-Tertiary: End client (HNW or institutional)
-Goal: receive a concise weekly perspective that explains what happened, why it matters, and the portfolio impact.
+### Notes
 
-Problem
+- **SEC feeds** don’t require keys and are high-signal for market-moving filings.
+- **MarketAux** and **NewsAPI** are polled with a query built from `QUERY_TERMS` in `.env`.
+- Output JSON fields:
+```
+id, published_at, source, url, headline, body_text, tickers[], entities[],
+event_type, regions[], sectors[], confidence, urgency, why_it_matters, draft_note, hash
+```
+- This service focuses on *ingestion only*. Next steps: push to a queue/DB, LLM classify/summarize, and alerting.
 
-Advisors need timely, trustworthy talking points without trawling dozens of sources. Weekly summaries take too long to prepare and are inconsistent in tone.
+## Customization
 
-Solution
+- Edit `QUERY_TERMS` in `.env` (e.g., "Fed,ECB,rate hike,CEO,resigns,merger,earnings").
+- Restrict NewsAPI to trusted `NEWSAPI_DOMAINS` for quality control.
+- Add more sources by creating a new `fetch_*` function in `app/sources.py` and mapping it through `normalize_*` helper.
 
-Ingest market news hourly from high-signal sources
+## Legal & Operational
 
-Classify relevance to assets and regions
-
-Auto-draft three short lines: What happened, Why it matters, Portfolio impact
-
-Human approves
-
-Compile a weekly PDF showing only items from the last 7 days
-
-Key workflows
-
-Hourly update: system pulls feeds and APIs, dedupes, classifies, drafts three lines.
-
-Curation: analyst reviews the queue, tweaks text, clicks Approve.
-
-Advisor view: Today and Weekly tabs. Copy LinkedIn text or share the PDF.
-
-Weekly brief: compile only approved items from the last 7 days.
-
-Publish: store PDF in IBM Cloud Object Storage and share a pre-signed link.
-
-Data the user should know
-
-For advisors: last refresh time, 7-day coverage window, source and link, publish time, three-line summary, asset and region tags, simple impact chip (up, down, neutral), editorial cutoff, legal disclaimer, quick actions.
-
-For analysts: ingestion status, relevance score, editable fields (title, lead, bullets, tags), approval state with timestamp, error states.
-
-For clients: weekly PDF with week range, approved cards, editorial cutoff, imprint and disclaimer.
-
-Non-functional requirements
-
-Freshness (hourly), reliability (graceful degradation on source failure), auditability (who approved what and when), compliance (sources, cutoff, disclaimer), localization (DE and EN), minimal PII.
-
-IBM Cloud footprint
-
-Compute: FastAPI on IBM Cloud Code Engine
-
-AI: watsonx.ai Granite for summarize and classify
-
-Storage: IBM Cloud Object Storage for PDFs; Postgres for app data
-
-Scheduling: Code Engine cron or Cloud Functions for hourly ingest
-
-Definition of done (MVP)
-
-Only items from the last 7 days are visible and timestamped with last refresh
-
-Each item has title, source, link, three short lines, tags, and impact
-
-Approve flow works end to end
-
-Weekly PDF includes editorial cutoff, authors, imprint, and disclaimer
-
-Deployed on IBM Cloud and accessible to judges
-
-One real example formatted to match “Current Perspectives” tone
+- Respect each API’s terms and rate limits.
+- For scraping sites without APIs, check robots.txt and ToS, and add caching/backoff.

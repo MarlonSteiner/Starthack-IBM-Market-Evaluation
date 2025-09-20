@@ -1,9 +1,3 @@
-# pipeline.py
-# ---------------------------------------------
-# News ingestion + normalization + heuristics + scoring.
-# Pure Python module (no UI code, no notebook magics).
-# ---------------------------------------------
-
 from __future__ import annotations
 
 import os
@@ -11,8 +5,11 @@ import re
 import hashlib
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Tuple
-from watson_helper import _wx_gen
-# Third-party deps (install in your venv:  pip install httpx==0.27.2 feedparser==6.0.11 pandas==2.2.2)
+from watson_helper import _wx_gen, wx_healthcheck
+from ranker import infer_scores, append_training_rows
+from datetime import timedelta
+import json
+
 try:
     import httpx
     import feedparser
@@ -23,15 +20,42 @@ except Exception as e:
         f"Import error was: {e}"
     )
 
+
+import re, json
+
+print("[watsonx]", wx_healthcheck())
+
+def _extract_json_block(raw: str):
+    if not raw:
+        return None
+    s = raw.strip()
+    # remove code fences if model wrapped output
+    if s.startswith("```"):
+        s = re.sub(r"^```(?:json)?\s*|\s*```$", "", s, flags=re.IGNORECASE|re.DOTALL)
+    # grab the first {...} block
+    m = re.search(r"\{.*\}", s, flags=re.DOTALL)
+    if not m:
+        return None
+    return json.loads(m.group(0))
+
+
 # -------------------- Config (via env) --------------------
 
 MARKETAUX_API_TOKEN = os.getenv("MARKETAUX_API_TOKEN", "")
 NEWSAPI_API_KEY     = os.getenv("NEWSAPI_API_KEY", "")
 
-QUERY_TERMS     = [q.strip() for q in os.getenv(
+QUERY_TERMS     = [q.strip() for q in os.getenv( # used by both MarketAux + NewsAPI
     "QUERY_TERMS",
     "Fed,ECB,earnings,merger,CEO,resigns,guidance,dividend,downgrade,upgrade"
 ).split(",") if q.strip()]
+
+# Macro: Fed, ECB → central bank statements/moves.
+
+# Corporate events: earnings, guidance, dividend, merger, CEO, resigns.
+
+# sell-side actions: downgrade, upgrade. (Upgrade = analyst raises the stock’s rating (e.g., Hold → Buy, Neutral → Overweight).
+
+# Downgrade = analyst lowers the rating (e.g., Buy → Hold, Outperform → Underperform).)
 
 NEWSAPI_DOMAINS = os.getenv(
     "NEWSAPI_DOMAINS",
@@ -164,7 +188,7 @@ def preclassify_keywords(item: Dict[str, Any]) -> None:
 
 _TICK_IN_PARENS = re.compile(r"\((?P<t>[A-Z]{1,5})\)")
 
-STOP_TICKERS = {
+STOP_TICKERS = { # discard these as false positives
     "A","AI","ALL","ANY","ARE","AS","AT","BE","CEO","EPS","ETF","FOR","FY","GO","IPO","IS","NAV",
     "OF","OK","ON","OR","PC","PER","Q1","Q2","Q3","Q4","RFK","THE","TO","UP","US","USD","VAT","YOY","WWW"
 }
@@ -188,7 +212,7 @@ NAME_TICKER = {
     "novo nordisk": "NVO",
 }
 
-def enrich_tickers(item: Dict[str, Any]) -> None:
+def enrich_tickers(item: Dict[str, Any]) -> None: # add tickers if missing
     if item.get("tickers"):
         return
     h = (item.get("headline") or "").lower()
@@ -210,7 +234,7 @@ def enrich_tickers(item: Dict[str, Any]) -> None:
 
 # -------------------- Dedupe, scoring, severity --------------------
 
-def dedupe(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+def dedupe(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]: # remove duplicates
     seen, out = set(), []
     for it in items:
         key = safe_hash(it.get("source",""), it.get("url",""), it.get("headline",""))
@@ -220,44 +244,88 @@ def dedupe(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         out.append(it)
     return out
 
-def score_item(it: Dict[str, Any]) -> float:
+# ---- Weights (tweak in one place) ----
+SOURCE_W = {
+    "sec_8k": 0.45,   # filings are high-signal but not always high-impact
+    "sec_10q": 0.30,
+    "sec_10k": 0.25,
+    "tier1_press": 0.30,   # Reuters/BBG/WSJ/FT/CNBC/MW
+    "other_press": 0.20,
+}
+EVENT_W = {
+    "ceo_exit": 0.35,
+    "bankruptcy": 0.35,
+    "non_reliance": 0.35,
+    "earnings_surprise": 0.30,
+    "mna": 0.30,
+    "guidance_change": 0.20,
+    "rating_change": 0.20,
+    "reg_fd": 0.10,
+    "geopolitics": 0.20,
+    "unregistered_sale": 0.15,
+    "dividend_change": 0.15,
+    "other_events": 0.05,
+}
+URGENCY_W = {"high": 0.15, "med": 0.06, "low": 0.00}
+KEYWORD_NUDGE = 0.03
+TICKER_PRESENT = 0.04
+WATCHLIST_BOOST = 0.12
+MAX_SCORE = 1.0
+
+TIER1 = ("reuters","bloomberg","wsj","ft","cnbc","marketwatch")
+
+from datetime import datetime, timezone
+
+def hours_old(item):
+    try:
+        dt = datetime.fromisoformat(item["published_at"].replace("Z","+00:00"))
+    except Exception:
+        return 0.0
+    now = datetime.now(timezone.utc)
+    return max(0.0, (now - dt).total_seconds() / 3600.0)
+
+def time_decay(item, half_life_hours=24):
+    # 24h half-life; =1 when fresh, 0.5 after 24h, etc.
+    h = hours_old(item)
+    return 0.5 ** (h / half_life_hours)
+
+def score_item(it: dict) -> float:
     s = 0.0
     src = (it.get("source") or "").lower()
-    et  = (it.get("event_type") or "other_events")
+    head = (it.get("headline") or "")
+    et = (it.get("event_type") or "other_events")
     urg = (it.get("urgency") or "low")
-    head = (it.get("headline") or "").lower()
 
-    # Source weighting
+    # Source
     if src == "sec_edgar":
-        if it["headline"].startswith("8-K"): s += 0.6
-        elif it["headline"].startswith("10-Q"): s += 0.3
-        elif it["headline"].startswith("10-K"): s += 0.25
-    elif any(d in src for d in ["reuters","bloomberg","wsj","ft","cnbc","marketwatch"]):
-        s += 0.35
-    else:
-        s += 0.25
+        if head.startswith("8-K"):   s += SOURCE_W["sec_8k"]
+        elif head.startswith("10-Q"): s += SOURCE_W["sec_10q"]
+        elif head.startswith("10-K"): s += SOURCE_W["sec_10k"]
+        else:                         s += SOURCE_W["sec_8k"] * 0.7
+    elif any(d in src for d in TIER1): s += SOURCE_W["tier1_press"]
+    else:                               s += SOURCE_W["other_press"]
 
-    # Event/urgency
-    high_events = {"ceo_exit","bankruptcy","non_reliance","earnings_surprise","mna"}
-    med_events  = {"guidance_change","rating_change","reg_fd","regulatory_sanction","geopolitics","unregistered_sale","dividend_change"}
-    if et in high_events: s += 0.35
-    elif et in med_events: s += 0.2
-    if urg == "high": s += 0.15
-    elif urg == "med": s += 0.05
+    # Event & urgency
+    s += EVENT_W.get(et, EVENT_W["other_events"])
+    s += URGENCY_W.get(urg, 0.0)
 
-    # Keyword nudge
-    for kw in ["guidance","resigns","resignation","appointed","impairment","non-reliance","acquisition","merger","downgrade","upgrade","beats","misses"]:
-        if kw in head:
-            s += 0.05
+    # Keyword nudges (small)
+    for kw in ("guidance","resigns","resignation","appointed","impairment",
+               "non-reliance","acquisition","merger","downgrade","upgrade","beats","misses"):
+        if kw in head.lower():
+            s += KEYWORD_NUDGE
 
-    # Ticker + watchlist boost
+    # Tickers
     tickers = set(it.get("tickers") or [])
     if tickers:
-        s += 0.05
-        if WATCHLIST & tickers:
-            s += 0.15
+        s += TICKER_PRESENT
+        if (tickers & WATCHLIST):
+            s += WATCHLIST_BOOST
 
-    return min(s, 1.0)
+    # Time decay (optional: apply to the impact portion only)
+    s = s * time_decay(it, half_life_hours=24)
+
+    return min(s, MAX_SCORE)
 
 def severity(score: float) -> str:
     if score >= 0.80: return "high"
@@ -266,7 +334,7 @@ def severity(score: float) -> str:
 
 # -------------------- LLM scaffolding (safe fallbacks) --------------------
 
-def llm_classify(item: dict) -> dict:
+def llm_classify(item: dict) -> dict: # turn a raw article into structured data 
     """Return event_type, tickers, sectors, asset_classes, regions, confidence (0-1)."""
     title = item.get("headline") or ""
     body  = (item.get("body_text") or "")[:1500]
@@ -289,15 +357,22 @@ TICKER_HINTS: {hints or "n/a"}
 Return ONLY JSON, no prose.
 """.strip()
 
-    raw = _wx_gen(prompt)
+    raw = _wx_gen(prompt, model_key="classify")
     # Safe fallback default
-    out = {"event_type":"other_events","tickers":item.get("tickers") or [],
-           "sectors":[], "asset_classes":["Equity"], "regions":["US"], "confidence":0.55}
+    out = {
+        "event_type": "other_events",
+        "tickers": item.get("tickers") or [],
+        "sectors": [],
+        "asset_classes": ["Equity"],
+        "regions": ["US"],
+        "confidence": 0.55,
+        "_classify_fallback": True,
+    }
     if not raw:
         return out
     # Try to parse JSON
     try:
-        j = json.loads(raw.strip().splitlines()[-1])
+        j = _extract_json_block(raw)
         # merge defensively
         for k in out.keys():
             if k in j and j[k] is not None:
@@ -305,6 +380,7 @@ Return ONLY JSON, no prose.
         # normalize types
         out["tickers"] = [str(t).upper() for t in (out.get("tickers") or [])]
         out["confidence"] = float(out.get("confidence") or 0.55)
+        out["_classify_fallback"] = False
         return out
     except Exception:
         return out
@@ -312,7 +388,23 @@ Return ONLY JSON, no prose.
 MAX_CLASSIFY  = 20   # cap LLM classify for testing
 MAX_SUMMARIZE = 20   # cap LLM summarize for testing
 
-def llm_summarize(item: dict) -> dict:
+WHY_DEFAULTS = {
+    "ceo_exit": "Leadership change can reset strategy/guidance; watch succession and market reaction.",
+    "mna": "Deal terms can re-rate acquirer/target; dilution, synergies and antitrust path drive impact.",
+    "earnings_surprise": "Beat/miss vs consensus shifts estimates and valuation; check guidance details.",
+    "auditor_change": "Auditor switches can flag reporting/control risk; credibility often pressured short term.",
+    "non_reliance": "Restatement/non-reliance raises financial reporting concerns and legal/regulatory risk.",
+    "bankruptcy": "Case outcomes drive creditor recoveries and equity value; watch first-day motions.",
+    "dividend_change": "Capital returns signal balance-sheet health and capital allocation priorities.",
+    "rating_change": "Sell-side actions can move flows, esp. in smaller caps; read the thesis details.",
+    "reg_fd": "Material disclosures under Reg FD may move expectations and estimates.",
+    "geopolitics": "Policy/supply-chain risk can affect sector multiples and demand.",
+    "other_events": "Potential impact on covered names and sector sentiment; confirm details as they develop."
+}
+
+
+
+def llm_summarize(item: dict) -> dict: # return json with headline, bullets, why_it_matters, for frontend display
     title = item.get("headline") or ""
     body  = (item.get("body_text") or "")[:1500]
     event = item.get("event_type") or "other_events"
@@ -339,32 +431,55 @@ TICKERS: {tick or "n/a"}
 Return ONLY JSON, no prose.
 """.strip()
 
-    raw = _wx_gen(prompt)
+    raw = _wx_gen(prompt, model_key="summarize")
     # Fallback
     h = title.strip()
     fallback = {
-        "headline": h[:90],
-        "bullets": [
-            (h[:90] + "."),
-            f"Event: {event} · Severity: {item.get('severity','low')}",
-            f"Tickers: {tick or 'n/a'} · Source: {item.get('source')}"
-        ],
-        "why_it_matters": "Potential impact on covered names and sector sentiment; confirm details as they develop."
+    "headline": h[:90],
+    "bullets": [
+        (h[:90] + "."),
+        f"Event: {event} · Severity: {item.get('severity','low')}",
+        f"Tickers: {tick or 'n/a'} · Source: {item.get('source')}"
+    ],
+    "why_it_matters": WHY_DEFAULTS.get(event, WHY_DEFAULTS["other_events"])
+}
+
+    meta = {
+        "_summary_fallback": True,
+        "_headline_fallback": True,
+        "_bullets_fallback": True,
+        "_why_fallback": True,
     }
+
     if not raw:
-        return fallback
+        return {**fallback, **meta}
+
     try:
-        j = json.loads(raw.strip().splitlines()[-1])
-        # basic validation
-        if not isinstance(j.get("bullets"), list) or len(j["bullets"]) < 3:
-            j["bullets"] = fallback["bullets"]
-        if not j.get("headline"):
-            j["headline"] = fallback["headline"]
-        if not j.get("why_it_matters"):
-            j["why_it_matters"] = fallback["why_it_matters"]
-        return j
+        j = _extract_json_block(raw)
+        if not j:
+            return {**fallback, **meta}
+
+        # decide field-by-field
+        headline = j.get("headline")
+        bullets  = j.get("bullets")
+        why      = j.get("why_it_matters")
+
+        headline_fb = not bool(headline)
+        bullets_fb  = not (isinstance(bullets, list) and len(bullets) >= 3)
+        why_fb      = not bool(why and str(why).strip())
+
+        result = {
+            "headline": headline if not headline_fb else fallback["headline"],
+            "bullets":  bullets  if not bullets_fb  else fallback["bullets"],
+            "why_it_matters": (str(why).strip() if not why_fb else fallback["why_it_matters"]),
+            "_headline_fallback": headline_fb,
+            "_bullets_fallback": bullets_fb,
+            "_why_fallback": why_fb,
+        }
+        result["_summary_fallback"] = (headline_fb and bullets_fb and why_fb)
+        return result
     except Exception:
-        return fallback
+        return {**fallback, **meta}
 
 
 # -------------------- Fetchers --------------------
@@ -400,11 +515,12 @@ def fetch_marketaux() -> List[Dict[str, Any]]:
     if not MARKETAUX_API_TOKEN:
         return []
     q = " OR ".join([f'"{t}"' for t in QUERY_TERMS]) or "markets"
+    published_after = (datetime.now(timezone.utc) - timedelta(hours=12)).replace(microsecond=0).isoformat()+"Z"
     params = {
         "api_token": MARKETAUX_API_TOKEN,
         "language":"en",
         "filter_entities":"true",
-        "published_after": datetime.now(timezone.utc).replace(microsecond=0).isoformat()+"Z",
+        "published_after": published_after,
         "limit": 50,
         "search": q
     }
@@ -476,117 +592,189 @@ from datetime import datetime
 def _ts():
     return datetime.now().strftime("%H:%M:%S")
 
-def process(min_score: float = 0.6, with_llm: bool = True) -> Dict[str, Any]:
+def process(min_score: float = 0.6, with_llm: bool = True, ml_weight: float = 0.7) -> Dict[str, Any]:
+    """
+    Pipeline:
+      1) Fetch → dedupe → enrich → pre-score (heuristic)
+      2) Select LLM subset: MATERIAL 8-K first, then by priority (pre-score + small nudges)
+      3) LLM classify subset (event/tickers + _llm_conf)
+      4) ML infer (_ml_score)
+      5) Final score = (1-ml_weight)*heur + ml_weight*ml + small LLM nudge
+      6) Filter, summarize, persist training rows
+    """
     t0 = time.perf_counter()
-    print(f"[{_ts()}] [pipeline] start (min_score={min_score}, with_llm={with_llm})", flush=True)
+    print(f"[{_ts()}] [pipeline] start (min_score={min_score}, with_llm={with_llm}, ml_weight={ml_weight})", flush=True)
 
+    # 1) Fetch
     print(f"[{_ts()}] [pipeline] fetching sources…", flush=True)
-    # edgar     = fetch_edgar()
+    edgar     = fetch_edgar()
     marketaux = fetch_marketaux()
     newsapi   = fetch_newsapi()
-    """print(f"[{_ts()}] [pipeline] fetched counts → edgar={len(edgar)} "
-          f"marketaux={len(marketaux)} newsapi={len(newsapi)}", flush=True)"""
+    print(f"[{_ts()}] fetched → edgar={len(edgar)} marketaux={len(marketaux)} newsapi={len(newsapi)}", flush=True)
 
-    #all_items = dedupe(edgar + marketaux + newsapi)
-    all_items = dedupe(marketaux + newsapi)
+    # 2) Dedupe
+    all_items = dedupe(edgar + marketaux + newsapi)
     print(f"[{_ts()}] [pipeline] after dedupe: total={len(all_items)}", flush=True)
-    
-    # --- TEST MODE: keep only the first 20 for LLM work ---
-    subset_for_llm = all_items[:MAX_CLASSIFY]
-    print(f"[pipeline] limiting LLM classify to first {len(subset_for_llm)} items", flush=True)
 
-    # --- Enrich + keyword preclassify BEFORE scoring ---
-    print(f"[{_ts()}] [pipeline] enrich + preclassify…", flush=True)
+    for it in all_items:
+        it["_classified"]  = False   # will flip to True inside the LLM classify loop
+        it["_summarized"]  = False
+        
+    # 3) Enrich + keyword preclassify + pre-score (heuristic only)
+    print(f"[{_ts()}] [pipeline] enrich + preclassify + pre-score…", flush=True)
     for idx, it in enumerate(all_items, 1):
         try:
             enrich_tickers(it)
             preclassify_keywords(it)
+            it["_pre_conf"] = score_item(it)  # heuristic prior with time decay
         except Exception as e:
             print(f"[{_ts()}] [warn] enrich/preclassify failed on item#{idx}: {e}", flush=True)
 
-    # --- Optional: LLM classify BEFORE filtering (to influence scoring) ---
-    if with_llm:
-        print(f"[pipeline] LLM classify on {len(subset_for_llm)} items…", flush=True)
+    # 4) Choose LLM classify subset
+    MATERIAL_EDGAR = {"1.01","2.01","2.02","4.01","4.02","5.02"}  # MA, M&A, results, auditor/non-reliance, CEO
+    def _is_tier1(src: str) -> bool:
+        s = (src or "").lower()
+        return any(d in s for d in TIER1)
+
+    def _is_edgar_8k(it) -> bool:
+        return (it.get("source", "").lower() == "sec_edgar" and (it.get("headline", "").startswith("8-K")))
+
+    def _on_watchlist(it) -> bool:
+        return bool(set(it.get("tickers") or []) & WATCHLIST)
+
+    def _priority_score(it) -> float:
+        # Score-first, small nudges for EDGAR 8-K, Tier-1, watchlist
+        pre = float(it.get("_pre_conf", 0.0))
+        bonus = 0.0
+        if _is_edgar_8k(it):                 bonus += 0.05
+        if _is_tier1(it.get("source")):      bonus += 0.03
+        if _on_watchlist(it):                bonus += 0.02
+        return pre + bonus
+
+    # Guardrail: always include material EDGAR
+    must_classify = [
+        it for it in all_items
+        if (it.get("source", "").lower() == "sec_edgar" and (set(it.get("entities") or []) & MATERIAL_EDGAR))
+    ]
+
+    # Fill the rest by priority; keep uniqueness; cap at MAX_CLASSIFY
+    seen_ids = {it["id"] for it in must_classify}
+    rest_sorted = sorted(all_items, key=_priority_score, reverse=True)
+    subset_for_llm = must_classify + [it for it in rest_sorted if it["id"] not in seen_ids]
+    subset_for_llm = subset_for_llm[:MAX_CLASSIFY]
+    print(f"[{_ts()}] [pipeline] LLM classify target count: {len(subset_for_llm)}", flush=True)
+
+    # 5) LLM classify subset (to improve event/tickers + get _llm_conf)
+    if with_llm and subset_for_llm:
+        print(f"[{_ts()}] [pipeline] LLM classify…", flush=True)
         for i, it in enumerate(subset_for_llm, 1):
-            cls = llm_classify(it)
-            it["event_type"]    = it.get("event_type") or cls.get("event_type")
-            it["tickers"]       = list({*(it.get("tickers") or []), *cls.get("tickers", [])})
-            it["sectors"]       = it.get("sectors") or cls.get("sectors") or []
-            it["asset_classes"] = it.get("asset_classes") or cls.get("asset_classes") or []
-            it["regions"]       = it.get("regions") or cls.get("regions") or []
-            it["_llm_conf"]     = float(cls.get("confidence") or 0.5)
+            try:
+                cls = llm_classify(it)
+                it["event_type"]    = it.get("event_type") or cls.get("event_type")
+                it["tickers"]       = list({*(it.get("tickers") or []), *cls.get("tickers", [])})
+                it["sectors"]       = it.get("sectors") or cls.get("sectors") or []
+                it["asset_classes"] = it.get("asset_classes") or cls.get("asset_classes") or []
+                it["regions"]       = it.get("regions") or cls.get("regions") or []
+                it["_llm_conf"]     = float(cls.get("confidence") or 0.5)
+                it["_classify_fallback"] = bool(cls.get("_classify_fallback", True))
+                it["_classified"]        = True
+            except Exception as e:
+                print(f"[{_ts()}] [warn] llm_classify failed on item {i}: {e}", flush=True)
             if i % 5 == 0:
                 print(f"  …classified {i}/{len(subset_for_llm)}", flush=True)
 
+    # 6) ML ranker inference
+    ml_scores = infer_scores(all_items)  # {} if no model yet
+    used_ml = 0
+    for it in all_items:
+        ms = ml_scores.get(it["id"])
+        if ms is not None:
+            it["_ml_score"] = float(ms)
+            used_ml += 1
+    print(f"[{_ts()}] [pipeline] ML scores available for {used_ml}/{len(all_items)} items", flush=True)
 
-
-    # --- Score + severity ---
+    # 7) Final score + severity (ML-led blend + tiny LLM nudge)
     print(f"[{_ts()}] [pipeline] scoring + severity…", flush=True)
     for it in all_items:
-        base = score_item(it)
+        heur = score_item(it)  # recompute with latest event/tickers (safe)
+        ml   = it.get("_ml_score")
+        if ml is not None:
+            base = (1.0 - ml_weight) * heur + ml_weight * float(ml)
+        else:
+            base = heur  # cold-start fallback
+
+        # very small nudge from LLM certainty (centered at 0.5)
         if "_llm_conf" in it:
-            base = max(base, min(1.0, 0.6*base + 0.5*it["_llm_conf"]))  # simple blend
+            base += 0.05 * (float(it["_llm_conf"]) - 0.5)
+
+        base = max(0.0, min(1.0, base))
         it["confidence"] = base
         it["severity"]   = severity(base)
 
-    # --- Filter AFTER blending ---
+    # 8) Filter AFTER blending
     filtered = [it for it in all_items if it["confidence"] >= min_score]
     print(f"[{_ts()}] [pipeline] filtered relevant: {len(filtered)} (threshold={min_score})", flush=True)
-    
-    # Sort by confidence so we summarize the most relevant first
-    filtered.sort(key=lambda x: x.get("confidence", 0), reverse=True)
+
+    # 9) Persist feature rows for future labeling/training
+    try:
+        from pathlib import Path
+        Path("out").mkdir(parents=True, exist_ok=True)
+        append_training_rows(all_items, csv_out="out/training_events.csv")
+    except Exception as e:
+        print(f"[{_ts()}] [warn] append_training_rows failed: {e}", flush=True)
+
+    # 10) Summarize ONLY top-N filtered
+    filtered.sort(key=lambda x: x.get("confidence", 0.0), reverse=True)
     to_summarize = filtered[:MAX_SUMMARIZE]
-    print(f"[pipeline] LLM summarize on {len(to_summarize)} of {len(filtered)} items…", flush=True)
-
-    if with_llm:
+    if with_llm and to_summarize:
+        print(f"[{_ts()}] [pipeline] LLM summarize on {len(to_summarize)} of {len(filtered)} items…", flush=True)
         for i, it in enumerate(to_summarize, 1):
-            summ = llm_summarize(it)
-            it["bullets"]        = summ.get("bullets", [])
-            it["why_it_matters"] = summ.get("why_it_matters", "Potential portfolio impact; confirm details.")
-            it["draft_note"]     = summ.get("draft_note", f"{it.get('headline','')} — {it.get('url','')}")
-            if i % 5 == 0:
-                print(f"  …summarized {i}/{len(to_summarize)}", flush=True)
-
-
-    # --- Optional: LLM summarize ONLY on filtered items ---
-    """f with_llm and filtered:
-        print(f"[{_ts()}] [pipeline] LLM summarize on {len(filtered)} items…", flush=True)
-        for i, it in enumerate(filtered, 1):
-            if i % 10 == 0:
-                print(f"[{_ts()}]   …summarized {i}/{len(filtered)}", flush=True)
             try:
-                cls = llm_classify(it)  # quick refresh in case event_type was still None
-                it["event_type"]    = it.get("event_type") or cls.get("event_type")
-                it["tickers"]       = list({*(it.get("tickers") or []), *cls.get("tickers",[])})
-                it["sectors"]       = cls.get("sectors") or it.get("sectors") or []
-                it["asset_classes"] = cls.get("asset_classes") or it.get("asset_classes") or []
-                it["regions"]       = cls.get("regions") or it.get("regions") or []
-                if isinstance(cls.get("confidence"), (int, float)):
-                    it["confidence"] = max(it["confidence"], float(cls["confidence"]))
-
+                if not it.get("event_type"):  # rare rescue
+                    cls = llm_classify(it)
+                    it["event_type"] = it.get("event_type") or cls.get("event_type")
                 summ = llm_summarize(it)
                 it["bullets"]        = summ.get("bullets", [])
                 it["why_it_matters"] = summ.get("why_it_matters", "Potential portfolio impact; confirm details.")
                 it["draft_note"]     = summ.get("draft_note", f"{it.get('headline','')} — {it.get('url','')}")
+                it["_summary_fallback"]  = bool(summ.get("_summary_fallback", True))
+                it["_headline_fallback"] = bool(summ.get("_headline_fallback", True))
+                it["_bullets_fallback"]  = bool(summ.get("_bullets_fallback", True))
+                it["_why_fallback"]      = bool(summ.get("_why_fallback", True))
+                it["_summarized"]        = True
             except Exception as e:
-                print(f"[{_ts()}] [warn] llm_summarize failed on item {i}: {e}", flush=True)"""
+                print(f"[{_ts()}] [warn] llm_summarize failed on item {i}: {e}", flush=True)
+            if i % 5 == 0:
+                print(f"  …summarized {i}/{len(to_summarize)}", flush=True)
+
+    # Clean tail (filtered but not summarized)
+    for it in filtered[MAX_SUMMARIZE:]:
+        it.pop("bullets", None); it.pop("why_it_matters", None); it.pop("draft_note", None)
 
     dt = time.perf_counter() - t0
     print(f"[{_ts()}] [pipeline] done in {dt:.2f}s — relevant={len(filtered)}/{len(all_items)}", flush=True)
 
+    classify_fb = sum(1 for it in all_items if it.get("_classified") and it.get("_classify_fallback"))
+    summ_fb     = sum(1 for it in filtered  if it.get("_summarized") and it.get("_summary_fallback"))
+
     return {
         "counts": {
-            #"sec_edgar": len(edgar),
+            "sec_edgar": len(edgar),
             "marketaux": len(marketaux),
             "newsapi": len(newsapi),
             "total_deduped": len(all_items),
             "relevant": len(filtered),
+            "classified": sum(it.get("_classified", False) for it in all_items),
+            "summarized": sum(it.get("_summarized", False) for it in filtered),
+            "classify_fallback": classify_fb,
+            "summarize_fallback": summ_fb,
         },
         "items": filtered,
     }
 
 
-def print_analyst_brief(items, *, top_n=10):
+
+"""def print_analyst_brief(items, *, top_n=10):
     # sort by confidence (desc)
     items = sorted(items, key=lambda x: x.get("confidence", 0.0), reverse=True)[:top_n]
     print("\n=== Analyst Brief (Top {}) ===".format(len(items)))
@@ -607,14 +795,14 @@ def print_analyst_brief(items, *, top_n=10):
             print(f" • {b}")
         wim = it.get("why_it_matters") or "Potential portfolio impact; confirm details."
         print(f"   Why it matters: {wim}")
-        print(f"   Link: {url}")
+        print(f"   Link: {url}")"""
 
 
 import pathlib, pandas as pd, json
 from collections import Counter
 
 if __name__ == "__main__":
-    out = process(min_score=0.65, with_llm=True)
+    out = process(min_score=0.4, with_llm=True)
     import pathlib, re, pandas as pd
 
     MATERIAL_ITEMS = {"5.02","2.02","2.01","4.01","1.01"}   # CEO exit, results, M&A, auditor change, material agreement
@@ -655,6 +843,13 @@ if __name__ == "__main__":
                 b += "."
             out.append(b)
         return out
+
+    def coalesce_why(event_type, why):
+        import pandas as pd
+        # treat None/NaN/empty as missing and backfill by event
+        if why is None or (isinstance(why, float) and pd.isna(why)) or not str(why).strip():
+            return WHY_DEFAULTS.get(event_type or "other_events", WHY_DEFAULTS["other_events"])
+        return str(why).strip()
 
 
     def write_current_perspective(items: list[dict], top_n_per_section: int = 6):
@@ -703,7 +898,7 @@ if __name__ == "__main__":
                     f.write(f"\n**{comp}** — {ev}; **{sev}**\n")
                     for b in r.get("bullets_clean") or []:
                         f.write(f"- {b}\n")
-                    why = r.get("why_it_matters") or "Potential impact on covered names and sector sentiment."
+                    why = coalesce_why(r.get("event_type"), r.get("why_it_matters"))
                     f.write(f"_Why it matters:_ {why}\n")
                     if tick != "n/a":
                         f.write(f"_Tickers:_ {tick}\n")
@@ -711,7 +906,7 @@ if __name__ == "__main__":
                     if url:
                         f.write(f"[Source]({url})\n")
 
-        keep_cols = ["published_at","source","company","headline","tickers",
+        keep_cols = ["id", "published_at","source","company","headline","tickers",
                     "event_type","entities","severity","confidence","why_it_matters","url"]
         df_mat[keep_cols].to_csv(p / "triage_material.csv", index=False)
         print("Saved: out/brief.md, out/triage_material.csv")
