@@ -55,6 +55,10 @@
     {
       "id": 14,
       "name": "adjustment"
+    },
+    {
+      "id": 15,
+      "name": "-liodfhaäowdfp"
     }
   ],
   "articles": [
@@ -63,7 +67,7 @@
       "title": "Federal Reserve Signals Potential Shift in Monetary Policy",
       "source": "Reuters",
       "url": "https://www.reuters.com/markets/us/fed-delivers-big-rate-hike-signals-more-come-2022-09-21/",
-      "date": "2025-09-20",
+      "datetime": "2025-09-20T18:10:00",
       "priority": "High",
       "summary": "The U.S. Federal Reserve hinted at a forthcoming adjustment to its monetary policy, citing persistent inflation pressures that exceed initial forecasts.",
       "context": "A hawkish shift from the Fed could lead to higher borrowing costs, impacting global equity markets and strengthening the US Dollar.",
@@ -79,7 +83,7 @@
       "title": "CEO of Tech Giant 'Innovate Corp' Steps Down Unexpectedly",
       "source": "Bloomberg",
       "url": "https://www.bloomberg.com/news/articles/2023-10-26/some-ceos-are-quitting-rather-than-giving-up-remote-work",
-      "date": "2025-09-19",
+      "datetime": "2025-09-19T11:35:00",
       "priority": "High",
       "summary": "John Miller, the celebrated CEO of Innovate Corp, has announced his immediate resignation, citing personal reasons. The company's stock fell 8% in after-hours trading.",
       "context": "Sudden leadership changes in major corporations create uncertainty and can significantly impact investor confidence and strategic direction.",
@@ -94,7 +98,7 @@
       "title": "Global Semiconductor Shortage Worsens, Impacting Auto and Tech Sectors",
       "source": "Nikkei Asia",
       "url": "https://asia.nikkei.com/Business/Tech/Semiconductor-shortage-to-cost-automakers-210bn-in-2021",
-      "date": "2025-09-18",
+      "datetime": "2025-09-18T21:05:00",
       "priority": "Medium",
       "summary": "Major chip manufacturers report extended lead times, with the global semiconductor shortage now expected to last well into next year, severely impacting production lines.",
       "context": "The ongoing chip shortage is a primary driver of inflation in the automotive and electronics sectors and poses a significant risk to Q4 corporate earnings.",
@@ -110,7 +114,7 @@
       "title": "Pharma Giants 'BioHealth' and 'Genetech' in Advanced Merger Talks",
       "source": "Wall Street Journal",
       "url": "https://www.wsj.com/articles/pharma-giant-to-buy-biotech",
-      "date": "2025-09-17",
+      "datetime": "2025-09-17T14:00:00",
       "priority": "Medium",
       "summary": "Sources report that BioHealth is in the final stages of a deal to acquire Genetech, creating a new powerhouse in the pharmaceutical sector valued at over $50 billion.",
       "context": "This M&A activity could reshape the competitive landscape of the pharma industry, leading to significant consolidation.",
@@ -124,7 +128,7 @@
       "title": "EU Announces Stricter Carbon Emission Regulations for 2030",
       "source": "Financial Times",
       "url": "https://www.ft.com/content/some-article-id",
-      "date": "2025-09-16",
+      "datetime": "2025-09-16T09:22:00",
       "priority": "Low",
       "summary": "The European Commission has laid out an ambitious plan to accelerate its green transition, with stricter CO2 emission targets for heavy industry and transportation.",
       "context": "These new regulations will force major capital expenditures in affected sectors but create significant opportunities for companies in the renewable energy and green tech space.",
