@@ -134,7 +134,7 @@ function App() {
 
     return (
         // These classes fix the layout to the screen height for independent scrolling
-        <div className="bg-slate-50 h-screen flex flex-col overflow-hidden">
+        <div className="bg-slate-200 h-screen flex flex-col overflow-hidden">
             <Header reviewCount={reviewItems.length} />
             {/* This main area fills the remaining space and contains the routes */}
             <main className="flex-1 overflow-y-hidden">
