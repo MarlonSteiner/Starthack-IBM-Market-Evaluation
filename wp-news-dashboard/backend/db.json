@@ -31,6 +31,10 @@
     {
       "name": "Trump",
       "id": 8
+    },
+    {
+      "name": "Finance",
+      "id": 9
     }
   ],
   "articles": [
