@@ -1,0 +1,150 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import axios from 'axios';
+
+// Die neue Komponente importieren
+import Header from './components/Header';
+import TagFilter from './components/TagFilter';
+import PriorityFilter from './components/PriorityFilter'; 
+import DraftingArea from './components/DraftingArea';
+import NewsArticleCard from './components/NewsArticleCard';
+
+const API_BASE_URL = 'http://localhost:3001/api';
+
+function App() {
+    const [articles, setArticles] = useState([]);
+    const [allTags, setAllTags] = useState([]);
+    const [selectedTags, setSelectedTags] = useState([]);
+    const [draftingArticleIds, setDraftingArticleIds] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [tagMessage, setTagMessage] = useState('');
+    const [selectedPriorities, setSelectedPriorities] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [articlesResponse, tagsResponse] = await Promise.all([
+                    axios.get(`${API_BASE_URL}/articles`),
+                    axios.get(`${API_BASE_URL}/tags`)
+                ]);
+                setArticles(articlesResponse.data);
+                setAllTags(tagsResponse.data);
+            } catch (err) { setError('Failed to load data from the server.'); } 
+            finally { setIsLoading(false); }
+        };
+        fetchData();
+    }, []);
+    
+    const handlePriorityToggle = (priority) => {
+        setSelectedPriorities(prev =>
+            prev.includes(priority)
+            ? prev.filter(p => p !== priority)
+            : [...prev, priority]
+        );
+    };
+
+    const handleTagToggle = (tagName) => {
+        setSelectedTags(prevTags => 
+            prevTags.includes(tagName) 
+            ? prevTags.filter(t => t !== tagName) 
+            : [...prevTags, tagName]
+        );
+    };
+    
+    const handleClearFilters = () => {
+        setSelectedTags([]);
+        setSelectedPriorities([]);
+    };
+
+    const handleAddNewTag = async (tagName) => {
+        setTagMessage('');
+        try {
+            const response = await axios.post(`${API_BASE_URL}/tags/process`, { name: tagName });
+            const { newTag, updatedArticles, allTags: updatedAllTags } = response.data;
+            setArticles(updatedArticles);
+            setAllTags(updatedAllTags);
+            setSelectedTags([newTag.name]);
+            const matches = updatedArticles.filter(article => article.tags.includes(newTag.name));
+            if (matches.length === 0) {
+                setTagMessage('Could not find tag related news');
+                setTimeout(() => {
+                    setTagMessage('');
+                }, 3000);
+            }
+        } catch(err) {
+            console.error("API Call Failed:", err.response || err);
+            alert("Error: Could not add the new tag. Check console (F12) for details.");
+        }
+    };
+
+    const handleToggleDraft = (articleId) => {
+        setDraftingArticleIds(prevIds => 
+            prevIds.includes(articleId)
+                ? prevIds.filter(id => id !== articleId)
+                : [...prevIds, articleId]
+        );
+    };
+
+    const handleSendForReview = () => {
+        setDraftingArticleIds([]);
+    };
+
+    const filteredArticles = useMemo(() => {
+        let tempArticles = articles;
+        if (selectedTags.length > 0) {
+            tempArticles = tempArticles.filter(article => 
+                article.tags.some(tag => selectedTags.includes(tag))
+            );
+        }
+        if (selectedPriorities.length > 0) {
+            tempArticles = tempArticles.filter(article =>
+                selectedPriorities.includes(article.priority)
+            );
+        }
+        return tempArticles;
+    }, [articles, selectedTags, selectedPriorities]);
+
+    return (
+        <div className="bg-slate-50 min-h-screen font-sans text-slate-900">
+            <Header />
+            <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                
+                <div className="lg:grid lg:grid-cols-12 lg:gap-8">
+                    <div className="lg:col-span-8">
+                       {!isLoading && !error && filteredArticles.map(article => (
+                           <NewsArticleCard 
+                                key={article.id} 
+                                article={article} 
+                                onToggleDraft={handleToggleDraft}
+                                isDrafting={draftingArticleIds.includes(article.id)}
+                            />
+                       ))}
+                    </div>
+                    <div className="lg:col-span-4">
+                         <div className="sticky top-8 flex flex-col gap-8">
+                             <TagFilter 
+                                allTags={allTags}
+                                selectedTags={selectedTags}
+                                onTagToggle={handleTagToggle}
+                                onAddNewTag={handleAddNewTag}
+                                onClearFilters={handleClearFilters}
+                                tagMessage={tagMessage}
+                            />
+                             <PriorityFilter
+                                selectedPriorities={selectedPriorities}
+                                onPriorityToggle={handlePriorityToggle}
+                             />
+                             <DraftingArea 
+                                articles={articles}
+                                draftingArticleIds={draftingArticleIds}
+                                onSendForReview={handleSendForReview}
+                             />
+                         </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    );
+}
+
+export default App;
