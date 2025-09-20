@@ -1,0 +1,11 @@
+
+
+OUTPUT:
+{
+  "headline": "Circle Internet Group CEO Departs; New Officer Appointed",
+  "bullets": [
+    "Circle Internet Group's CEO has departed.",
+    "A new officer has been appointed in the CEO's place.",
+    "The company filed an 8-K disclosing the change.",
+  ],
+  "why_it_matters": "The CEO's departure may

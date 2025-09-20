@@ -1,0 +1,9 @@
+
+
+{
+  "event_type": "ceo_exit",
+  "tickers": ["FED", "NASDAQ"],
+  "sectors": ["Finance"],
+  "asset_classes": ["Equity"],
+  "regions": ["US"],
+  "confidence": 0.95

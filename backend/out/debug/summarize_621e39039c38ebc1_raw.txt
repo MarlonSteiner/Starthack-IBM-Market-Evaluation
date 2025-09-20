@@ -1,0 +1,10 @@
+TYPE=str
+
+
+
+OUTPUT
+{
+  "headline": "Janux Therapeutics CEO Departs; New CEO Appointed",
+  "bullets": [
+    "Janux Therapeutics CEO, Dr. David R. Epstein, resigns effective 2025-09-19.",
+    "Board appoints Dr. Jeffrey S. Flier as new CEO, effective 2025

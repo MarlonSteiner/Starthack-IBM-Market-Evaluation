@@ -1,0 +1,11 @@
+
+
+OUTPUT:
+{
+  "headline": "FHLMC CEO Exits; New Officer Appointed",
+  "bullets": [
+    "FHLMC CEO resigns, effective 2025-09-19.",
+    "New officer appointed, details undisclosed.",
+    "8-K filed with SEC, Item 5.02 and 9.01.",
+  ],
+ 

@@ -1,0 +1,648 @@
+{
+  "meta": {
+    "generated_at": "2025-09-20T18:50:55Z",
+    "counts": {
+      "marketaux": 0,
+      "newsapi": 50,
+      "total_deduped": 50,
+      "relevant": 17,
+      "classified": 50,
+      "summarized": 12,
+      "classify_fallback": 6,
+      "summarize_fallback": 12
+    },
+    "version": 1
+  },
+  "items": [
+    {
+      "id": "35a29dcaeb01632a",
+      "published_at": "2025-09-18T19:02:54Z",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2025/09/18/crowdstrike-investor-day-stock.html",
+      "headline": "CrowdStrike pops 12% on upbeat long-term guidance at investor day",
+      "body_text": "The cybersecurity firm shared strong long-term guidance this week and announced plans to buy AI security company Pangea.\n\nCrowdStrike shares popped more than 12%, a day after the cybersecurity firm issued better-than-expected long-term guidance at its investor day.\r\nThe company on Wednesday said it expects net new annua… [+614 chars]",
+      "event_type": "earnings_surprise",
+      "entities": [],
+      "tickers": [
+        "CRWD"
+      ],
+      "sectors": [
+        "Technology"
+      ],
+      "asset_classes": [
+        "Equity"
+      ],
+      "regions": [
+        "US"
+      ],
+      "confidence": 0.4378847948344977,
+      "severity": "low",
+      "_pre_conf": 0.5934653865745179,
+      "_ml_score": 1.2995000093008104e-05,
+      "_llm_conf": 0.95,
+      "bullets": [
+        "CrowdStrike pops 12% on upbeat long-term guidance at investor day.",
+        "Ereignis: earnings_surprise · Priorität: low",
+        "Ticker: CRWD · Quelle: CNBC"
+      ],
+      "why_it_matters": "Abweichungen vom Konsens ändern Schätzungen und Bewertungen; Guidance entscheidend.",
+      "draft_note": "CrowdStrike pops 12% on upbeat long-term guidance at investor day — https://www.cnbc.com/2025/09/18/crowdstrike-investor-day-stock.html",
+      "_classified": true,
+      "_classify_fallback": false,
+      "_summarized": true,
+      "_summary_fallback": true,
+      "_headline_fallback": true,
+      "_bullets_fallback": true,
+      "_why_fallback": false
+    },
+    {
+      "id": "03c8ebf448f1bac5",
+      "published_at": "2025-09-19T13:52:25Z",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2025/09/19/apple-ceo-tim-cook-iphone-price-increase-tariffs.html",
+      "headline": "Apple CEO Tim Cook says iPhone price hikes are not tied to tariffs",
+      "body_text": "Apple CEO Tim Cook said the latest iPhone price hikes aren't connected to President Donald Trump's sweeping tariff plans.\n\nApple CEO Tim Cook said price hikes on the newest iPhone models aren't tied to President Donald Trump's sweeping tariff plans.\r\n\"There's no increase for tariffs in the prices to be totally clear,\" Co… [+1279 chars]",
+      "event_type": "geopolitics",
+      "entities": [],
+      "tickers": [
+        "AAPL"
+      ],
+      "sectors": [
+        "Technology"
+      ],
+      "asset_classes": "Equity",
+      "regions": "US",
+      "confidence": 0.4066383197116779,
+      "severity": "low",
+      "_pre_conf": 0.42380251680889225,
+      "_ml_score": 0.0008575230449477834,
+      "_llm_conf": 1.0,
+      "bullets": [
+        "Apple CEO Tim Cook says iPhone price hikes are not tied to tariffs.",
+        "Ereignis: geopolitics · Priorität: low",
+        "Ticker: AAPL · Quelle: CNBC"
+      ],
+      "why_it_matters": "Politik- und Lieferkettenrisiken beeinflussen Sektormultiplikatoren und Nachfrage.",
+      "draft_note": "Apple CEO Tim Cook says iPhone price hikes are not tied to tariffs — https://www.cnbc.com/2025/09/19/apple-ceo-tim-cook-iphone-price-increase-tariffs.html",
+      "_classified": true,
+      "_classify_fallback": false,
+      "_summarized": true,
+      "_summary_fallback": true,
+      "_headline_fallback": true,
+      "_bullets_fallback": true,
+      "_why_fallback": false
+    },
+    {
+      "id": "2eaa44dc60b14708",
+      "published_at": "2025-09-19T18:39:41Z",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2025/09/19/jimmy-kimmel-disney-eisner-fcc-abc.html",
+      "headline": "Former Disney CEO Eisner backs Jimmy Kimmel, blasts FCC 'intimidation' of ABC",
+      "body_text": "Disney and ABC have faced criticism for bowing to pressure from Federal Communications Commission Chairman Brendan Carr in benching Jimmy Kimmel.\n\nFormer Disney CEO Michael Eisner on Friday issued a statement supporting Jimmy Kimmel, whose late-night show has been suspended indefinitely by Disney's subsidiary ABC for comments the host made abou… [+673 chars]",
+      "event_type": "ceo_exit",
+      "entities": [],
+      "tickers": [
+        "DIS",
+        "ABC"
+      ],
+      "sectors": [
+        "Media"
+      ],
+      "asset_classes": [
+        "Equity"
+      ],
+      "regions": [
+        "US"
+      ],
+      "confidence": 0.4059585258130348,
+      "severity": "low",
+      "_pre_conf": 0.2773710401222501,
+      "_ml_score": 0.002426130013088816,
+      "_llm_conf": 0.95,
+      "bullets": [
+        "Former Disney CEO Eisner backs Jimmy Kimmel, blasts FCC 'intimidation' of ABC.",
+        "Ereignis: ceo_exit · Priorität: low",
+        "Ticker: DIS, ABC · Quelle: CNBC"
+      ],
+      "why_it_matters": "Führungswechsel kann Strategie und Guidance verschieben; Nachfolge und Marktreaktion beobachten.",
+      "draft_note": "Former Disney CEO Eisner backs Jimmy Kimmel, blasts FCC 'intimidation' of ABC — https://www.cnbc.com/2025/09/19/jimmy-kimmel-disney-eisner-fcc-abc.html",
+      "_classified": true,
+      "_classify_fallback": false,
+      "_summarized": true,
+      "_summary_fallback": true,
+      "_headline_fallback": true,
+      "_bullets_fallback": true,
+      "_why_fallback": false
+    },
+    {
+      "id": "b77e837f9317e783",
+      "published_at": "2025-09-19T17:31:59Z",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2025/09/19/bitcoin-coinbase-kevin-durant-nba-password.html",
+      "headline": "Kevin Durant has access restored to his Coinbase bitcoin account after years",
+      "body_text": "Kevin Durant has regained access to his Coinbase account containing bitcoins.\n\nNBA star Kevin Durant has regained access to his bevy of Bitcoins, years after getting locked out of his Coinbase account. \r\n\"We got this fixed. Account recovery complete,\" Coinbase CEO Brian Armstro… [+2445 chars]",
+      "event_type": "ceo_exit",
+      "entities": [],
+      "tickers": [],
+      "sectors": [],
+      "asset_classes": "Equity",
+      "regions": "n/a",
+      "confidence": 0.37976386242766835,
+      "severity": "low",
+      "_pre_conf": 0.2743743979905885,
+      "_ml_score": 0.0020522522584968286,
+      "_llm_conf": 0.95,
+      "bullets": [],
+      "why_it_matters": null,
+      "draft_note": null,
+      "_classified": true,
+      "_classify_fallback": false,
+      "_summarized": false,
+      "_summary_fallback": true,
+      "_headline_fallback": true,
+      "_bullets_fallback": true,
+      "_why_fallback": true
+    },
+    {
+      "id": "ada8edec2d54ec68",
+      "published_at": "2025-09-18T20:11:52Z",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2025/09/18/fedex-fdx-q1-2026-earnings.html",
+      "headline": "FedEx stock rises on better-than-expected earnings",
+      "body_text": "FedEx beat on the top and bottom lines in its first fiscal quarter earnings report on Thursday.\n\nFedEx beat on the top and bottom lines in its fiscal first-quarter earnings report on Thursday.\r\nThe stock rose moer than 5% in after-hours trading on Thursday.\r\n\"Our earnings growth underscores the … [+1444 chars]",
+      "event_type": "earnings_surprise",
+      "entities": [],
+      "tickers": [
+        "FDX"
+      ],
+      "sectors": [
+        "Logistics"
+      ],
+      "asset_classes": [
+        "Equity"
+      ],
+      "regions": [
+        "US"
+      ],
+      "confidence": 0.36208324374925294,
+      "severity": "low",
+      "_pre_conf": 0.3255693495723252,
+      "_ml_score": 2.137069852677981e-05,
+      "_llm_conf": 0.95,
+      "bullets": [
+        "FedEx stock rises on better-than-expected earnings.",
+        "Ereignis: earnings_surprise · Priorität: low",
+        "Ticker: FDX · Quelle: CNBC"
+      ],
+      "why_it_matters": "Abweichungen vom Konsens ändern Schätzungen und Bewertungen; Guidance entscheidend.",
+      "draft_note": "FedEx stock rises on better-than-expected earnings — https://www.cnbc.com/2025/09/18/fedex-fdx-q1-2026-earnings.html",
+      "_classified": true,
+      "_classify_fallback": false,
+      "_summarized": true,
+      "_summary_fallback": true,
+      "_headline_fallback": true,
+      "_bullets_fallback": true,
+      "_why_fallback": false
+    },
+    {
+      "id": "7456b5ffbfbc0760",
+      "published_at": "2025-09-19T13:06:16Z",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2025/09/19/oil-prices-dip-as-demand-fears-overshadow-fed-rate-cut.html",
+      "headline": "Oil prices dip as demand fears overshadow Fed rate cut",
+      "body_text": "Oil prices dropped as worries about large supplies and declining demand outweighed expectations that the Federal Reserve's cut would trigger more consumption.\n\nOil prices dropped on Friday as worries about large supplies and declining demand outweighed expectations that the year's first interest-rate cut by the U.S. Federal Reserve would trigger more consum… [+2001 chars]",
+      "event_type": "earnings_surprise",
+      "entities": [],
+      "tickers": [
+        "OIL"
+      ],
+      "sectors": [
+        "Energy"
+      ],
+      "asset_classes": "Equity",
+      "regions": "Global",
+      "confidence": 0.35672968424912554,
+      "severity": "low",
+      "_pre_conf": 0.26292245827065497,
+      "_ml_score": 0.0007509721074365193,
+      "_llm_conf": 0.9,
+      "bullets": [
+        "Oil prices dip as demand fears overshadow Fed rate cut.",
+        "Ereignis: earnings_surprise · Priorität: low",
+        "Ticker: OIL · Quelle: CNBC"
+      ],
+      "why_it_matters": "Abweichungen vom Konsens ändern Schätzungen und Bewertungen; Guidance entscheidend.",
+      "draft_note": "Oil prices dip as demand fears overshadow Fed rate cut — https://www.cnbc.com/2025/09/19/oil-prices-dip-as-demand-fears-overshadow-fed-rate-cut.html",
+      "_classified": true,
+      "_classify_fallback": false,
+      "_summarized": true,
+      "_summary_fallback": true,
+      "_headline_fallback": true,
+      "_bullets_fallback": true,
+      "_why_fallback": false
+    },
+    {
+      "id": "d980dcdf5eb1d8e5",
+      "published_at": "2025-09-19T12:30:01Z",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2025/09/19/how-know-if-your-annual-credit-card-fee-is-worth-it.html",
+      "headline": "Premium credit cards are getting more expensive—3 ways to know if the annual fee is worth it",
+      "body_text": "Credit card companies are upping the fees, and the benefits, on their most expensive cards. Knowing whether they're worth it requires some introspection.\n\nMany premium travel credit cards aimed at wealthy customers now come with higher annual fees.\r\nOn Thursday, American Express unveiled long-awaited updates to its Platinum card, which now carries an $… [+4434 chars]",
+      "event_type": "earnings_surprise",
+      "entities": [],
+      "tickers": [
+        "AMEXPLAT"
+      ],
+      "sectors": [
+        "Financial Services"
+      ],
+      "asset_classes": [
+        "Equity"
+      ],
+      "regions": [
+        "US"
+      ],
+      "confidence": 0.35475157611453756,
+      "severity": "low",
+      "_pre_conf": 0.26139765044124685,
+      "_ml_score": 0.0006624211145212901,
+      "_llm_conf": 0.9,
+      "bullets": [
+        "Premium credit cards are getting more expensive—3 ways to know if the annual fee is worth .",
+        "Ereignis: earnings_surprise · Priorität: low",
+        "Ticker: AMEXPLAT · Quelle: CNBC"
+      ],
+      "why_it_matters": "Abweichungen vom Konsens ändern Schätzungen und Bewertungen; Guidance entscheidend.",
+      "draft_note": "Premium credit cards are getting more expensive—3 ways to know if the annual fee is worth it — https://www.cnbc.com/2025/09/19/how-know-if-your-annual-credit-card-fee-is-worth-it.html",
+      "_classified": true,
+      "_classify_fallback": false,
+      "_summarized": true,
+      "_summary_fallback": true,
+      "_headline_fallback": true,
+      "_bullets_fallback": true,
+      "_why_fallback": false
+    },
+    {
+      "id": "05c9db9cd49b9a66",
+      "published_at": "2025-09-19T17:25:13Z",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2025/09/19/gas-expected-to-get-cheaper-this-fall.html",
+      "headline": "Gas is expected to get cheaper this fall: It's looking good 'for motorists in most areas,' one expert says",
+      "body_text": "Gas prices, which typically decline in the latter half of the year, could fall to around $3 per gallon sometime in October, one expert says.\n\nAs inflation drives up the cost of most goods and services, gas is one of the few things that hasn't gotten more expensive, and it might even get cheaper this fall.\r\nThe national average for a gallon… [+2474 chars]",
+      "event_type": "earnings_surprise",
+      "entities": [],
+      "tickers": [],
+      "sectors": [
+        "Energy"
+      ],
+      "asset_classes": "Equity",
+      "regions": [
+        "n/a"
+      ],
+      "confidence": 0.3494462999478661,
+      "severity": "low",
+      "_pre_conf": 0.2740766667572096,
+      "_ml_score": 0.001966093176351114,
+      "_llm_conf": 0.9,
+      "bullets": [],
+      "why_it_matters": null,
+      "draft_note": null,
+      "_classified": true,
+      "_classify_fallback": false,
+      "_summarized": false,
+      "_summary_fallback": true,
+      "_headline_fallback": true,
+      "_bullets_fallback": true,
+      "_why_fallback": true
+    },
+    {
+      "id": "1902d460a5780381",
+      "published_at": "2025-09-18T11:55:05Z",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2025/09/18/deliveroo-founder-will-shu-to-step-down-as-ceo-after-doordash-takeover.html",
+      "headline": "Deliveroo founder Will Shu to step down as CEO after DoorDash takeover",
+      "body_text": "\"I have decided that now is the right time for me to step down,\" Deliveroo CEO Will Shu said Thursday.\n\nLONDON Deliveroo CEO Will Shu is set to step down from the food delivery company he co-founded over a decade ago.\r\nShu, who established Deliveroo in 2013 with childhood friend Greg Orlowski, said Thu… [+1171 chars]",
+      "event_type": "mna",
+      "entities": [],
+      "tickers": [
+        "ROO"
+      ],
+      "sectors": [
+        "Technology"
+      ],
+      "asset_classes": [
+        "Equity"
+      ],
+      "regions": [
+        "UK"
+      ],
+      "confidence": 0.3484386759435983,
+      "severity": "low",
+      "_pre_conf": 0.4656752304724193,
+      "_ml_score": 4.085785213519396e-06,
+      "_llm_conf": 0.95,
+      "bullets": [
+        "Deliveroo founder Will Shu to step down as CEO after DoorDash takeover.",
+        "Ereignis: mna · Priorität: low",
+        "Ticker: ROO · Quelle: CNBC"
+      ],
+      "why_it_matters": "Bewertung von Käufer und Ziel hängt an Bedingungen, Verwässerung, Synergien und Kartellfreigabe.",
+      "draft_note": "Deliveroo founder Will Shu to step down as CEO after DoorDash takeover — https://www.cnbc.com/2025/09/18/deliveroo-founder-will-shu-to-step-down-as-ceo-after-doordash-takeover.html",
+      "_classified": true,
+      "_classify_fallback": false,
+      "_summarized": true,
+      "_summary_fallback": true,
+      "_headline_fallback": true,
+      "_bullets_fallback": true,
+      "_why_fallback": false
+    },
+    {
+      "id": "8c80565399476a45",
+      "published_at": "2025-09-19T12:47:39Z",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2025/09/19/kashkari-advocates-two-more-rate-cuts-this-year-as-he-sees-limited-tariff-impact-on-inflation.html",
+      "headline": "Kashkari advocates two more rate cuts this year as he sees limited tariff impact on inflation",
+      "body_text": "Minneapolis Federal Reserve President Neel Kashkari spoke Friday on CNBC's \"Squawk Box.\"\n\nMinneapolis Federal Reserve President Neel Kashkari said Friday that he expects President Donald Trump's tariffs to expert minimum long-term pressure on inflation, leaving room for multiple interest … [+1507 chars]",
+      "event_type": "geopolitics",
+      "entities": [],
+      "tickers": [
+        "MBN"
+      ],
+      "sectors": [
+        "Finance"
+      ],
+      "asset_classes": "Equity",
+      "regions": "US",
+      "confidence": 0.3372473361447166,
+      "severity": "low",
+      "_pre_conf": 0.41942122432708295,
+      "_ml_score": 0.0007179927470318103,
+      "_llm_conf": 0.95,
+      "bullets": [
+        "Kashkari advocates two more rate cuts this year as he sees limited tariff impact on inflat.",
+        "Ereignis: geopolitics · Priorität: low",
+        "Ticker: MBN · Quelle: CNBC"
+      ],
+      "why_it_matters": "Politik- und Lieferkettenrisiken beeinflussen Sektormultiplikatoren und Nachfrage.",
+      "draft_note": "Kashkari advocates two more rate cuts this year as he sees limited tariff impact on inflation — https://www.cnbc.com/2025/09/19/kashkari-advocates-two-more-rate-cuts-this-year-as-he-sees-limited-tariff-impact-on-inflation.html",
+      "_classified": true,
+      "_classify_fallback": false,
+      "_summarized": true,
+      "_summary_fallback": true,
+      "_headline_fallback": true,
+      "_bullets_fallback": true,
+      "_why_fallback": false
+    },
+    {
+      "id": "4459ac19fe6864ed",
+      "published_at": "2025-09-19T16:12:21Z",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2025/09/19/miran-says-he-doesnt-see-tariffs-causing-inflation-putting-him-in-minority-on-fed-committee.html",
+      "headline": "Miran says he doesn't see tariffs causing inflation, putting him in minority on Fed committee",
+      "body_text": "Federal Reserve Governor Stephen Miran spoke on CNBC's \"Money Movers\" on Friday.\n\nFederal Reserve Governor Stephen Miran said Friday that he doesn't anticipate President Donald Trump's tariffs will have an inflationary impact on the U.S. economy.\r\n\"I'm clearly in the minority in n… [+2671 chars]",
+      "event_type": "geopolitics",
+      "entities": [],
+      "tickers": [],
+      "sectors": [],
+      "asset_classes": "Equity",
+      "regions": "US",
+      "confidence": 0.32633259509718027,
+      "severity": "low",
+      "_pre_conf": 0.433425529058414,
+      "_ml_score": 0.0015583293890257225,
+      "_llm_conf": 0.95,
+      "bullets": [],
+      "why_it_matters": null,
+      "draft_note": null,
+      "_classified": true,
+      "_classify_fallback": false,
+      "_summarized": false,
+      "_summary_fallback": true,
+      "_headline_fallback": true,
+      "_bullets_fallback": true,
+      "_why_fallback": true
+    },
+    {
+      "id": "2ce379d7ad90f854",
+      "published_at": "2025-09-19T02:05:00Z",
+      "source": "MarketWatch",
+      "url": "https://www.marketwatch.com/story/why-mortgage-rates-are-actually-going-up-after-the-fed-cut-interest-rates-87c712bd",
+      "headline": "Why mortgage rates are actually going up after the Fed cut interest rates",
+      "body_text": "The 30-year mortgage rate shot up the day after the Federal Reserve cut interest rates.\n\nThe 30-year mortgage rate shot up the day after the Federal Reserve cut interest rates. - AFP/Getty Images\r\nHours after the Federal Reserve cut its benchmark interest rate by 25 basis points on Wedne… [+5012 chars]",
+      "event_type": "earnings_surprise",
+      "entities": [],
+      "tickers": [
+        "MBI.AX"
+      ],
+      "sectors": [
+        "Real Estate"
+      ],
+      "asset_classes": "Equity",
+      "regions": "US",
+      "confidence": 0.3226526828327619,
+      "severity": "low",
+      "_pre_conf": 0.23645512117580594,
+      "_ml_score": 7.607182004241064e-05,
+      "_llm_conf": 0.9,
+      "bullets": [
+        "Why mortgage rates are actually going up after the Fed cut interest rates.",
+        "Ereignis: earnings_surprise · Priorität: low",
+        "Ticker: MBI.AX · Quelle: MarketWatch"
+      ],
+      "why_it_matters": "Abweichungen vom Konsens ändern Schätzungen und Bewertungen; Guidance entscheidend.",
+      "draft_note": "Why mortgage rates are actually going up after the Fed cut interest rates — https://www.marketwatch.com/story/why-mortgage-rates-are-actually-going-up-after-the-fed-cut-interest-rates-87c712bd",
+      "_classified": true,
+      "_classify_fallback": false,
+      "_summarized": true,
+      "_summary_fallback": true,
+      "_headline_fallback": true,
+      "_bullets_fallback": true,
+      "_why_fallback": false
+    },
+    {
+      "id": "9885cbdf3ae8cf3d",
+      "published_at": "2025-09-19T12:50:09Z",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2025/09/19/trade-war-tariffs-consumer-prices-inflation-retail.html",
+      "headline": "Trade war 'tariff hacking': How retailers are using wholesale middlemen to keep consumer prices down",
+      "body_text": "From luxury goods to mass-market items, retail distributors are using a tariff arbitrage strategy to get consumers closer to wholesale prices.\n\nRetail companies spanning from the luxury sector to lower-value goods are using a tariff arbitrage strategy within their supply chains to lower tariff bills and keep costs down for consumers.\r\nThe bu… [+6723 chars]",
+      "event_type": "geopolitics",
+      "entities": [],
+      "tickers": [],
+      "sectors": [
+        "Retail"
+      ],
+      "asset_classes": "Equity",
+      "regions": [
+        "Global"
+      ],
+      "confidence": 0.31390868780704656,
+      "severity": "low",
+      "_pre_conf": 0.4195894992368181,
+      "_ml_score": 0.0007592189668991903,
+      "_llm_conf": 0.9,
+      "bullets": [],
+      "why_it_matters": null,
+      "draft_note": null,
+      "_classified": true,
+      "_classify_fallback": false,
+      "_summarized": false,
+      "_summary_fallback": true,
+      "_headline_fallback": true,
+      "_bullets_fallback": true,
+      "_why_fallback": true
+    },
+    {
+      "id": "8ea61110b1b76446",
+      "published_at": "2025-09-18T12:27:48Z",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2025/09/18/larry-ellison-365-billion-fortune-wealth-management.html",
+      "headline": "Oracle's Larry Ellison made his $365 billion fortune by breaking every rule of wealth management",
+      "body_text": "Larry Ellison's fortune is built on mountains of leverage and risk, allowing him to borrow against his shares and raise cash without giving up control.\n\nA version of this article appeared in CNBC's Inside Wealth newsletter with Robert Frank, a weekly guide to the high-net-worth investor and consumer. Sign up to receive future editions, straight to yo… [+8600 chars]",
+      "event_type": "ceo_exit",
+      "entities": [],
+      "tickers": [
+        "ORCL"
+      ],
+      "sectors": [
+        "Technology"
+      ],
+      "asset_classes": [
+        "Equity"
+      ],
+      "regions": [
+        "US"
+      ],
+      "confidence": 0.30867924774521016,
+      "severity": "low",
+      "_pre_conf": 0.2311002658925577,
+      "_ml_score": 4.5760263492533955e-06,
+      "_llm_conf": 0.95,
+      "bullets": [
+        "Oracle's Larry Ellison made his $365 billion fortune by breaking every rule of wealth mana.",
+        "Ereignis: ceo_exit · Priorität: low",
+        "Ticker: ORCL · Quelle: CNBC"
+      ],
+      "why_it_matters": "Führungswechsel kann Strategie und Guidance verschieben; Nachfolge und Marktreaktion beobachten.",
+      "draft_note": "Oracle's Larry Ellison made his $365 billion fortune by breaking every rule of wealth management — https://www.cnbc.com/2025/09/18/larry-ellison-365-billion-fortune-wealth-management.html",
+      "_classified": true,
+      "_classify_fallback": false,
+      "_summarized": true,
+      "_summary_fallback": true,
+      "_headline_fallback": true,
+      "_bullets_fallback": true,
+      "_why_fallback": false
+    },
+    {
+      "id": "2c7741a6ed1c1394",
+      "published_at": "2025-09-18T18:00:28Z",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2025/09/18/notion-launches-ai-agent-as-it-crosses-500-million-in-annual-revenue.html",
+      "headline": "Notion rides AI boom to $500 million in annual revenue, but Microsoft competition looms",
+      "body_text": "Notion, which competes with Google and Microsoft in productivity software, has seen soaring revenue growth thanks to a host of AI tools.\n\nOpenAI's public launch of ChatGPT in November 2022 is widely viewed as the event that kicked off the generative AI boom, which remains the dominant theme in the tech industry almost three years later… [+4037 chars]",
+      "event_type": "earnings_surprise",
+      "entities": [],
+      "tickers": [
+        "NOTION"
+      ],
+      "sectors": [
+        "Technology"
+      ],
+      "asset_classes": "Equity",
+      "regions": "US",
+      "confidence": 0.3024979459627747,
+      "severity": "low",
+      "_pre_conf": 0.2187686318795999,
+      "_ml_score": 1.448403001544446e-05,
+      "_llm_conf": 0.95,
+      "bullets": [
+        "Notion rides AI boom to $500 million in annual revenue, but Microsoft competition looms.",
+        "Ereignis: earnings_surprise · Priorität: low",
+        "Ticker: NOTION · Quelle: CNBC"
+      ],
+      "why_it_matters": "Abweichungen vom Konsens ändern Schätzungen und Bewertungen; Guidance entscheidend.",
+      "draft_note": "Notion rides AI boom to $500 million in annual revenue, but Microsoft competition looms — https://www.cnbc.com/2025/09/18/notion-launches-ai-agent-as-it-crosses-500-million-in-annual-revenue.html",
+      "_classified": true,
+      "_classify_fallback": false,
+      "_summarized": true,
+      "_summary_fallback": true,
+      "_headline_fallback": true,
+      "_bullets_fallback": true,
+      "_why_fallback": false
+    },
+    {
+      "id": "16679b238f2c945e",
+      "published_at": "2025-09-19T16:44:22Z",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2025/09/19/chip-stocks-ai-tech-investing-etfs.html",
+      "headline": "Wall Street bets on chip boom are getting more concentrated, and it could be good thing for investors",
+      "body_text": "AI and Nvidia's stock success have made the chip sector one of the market's most closely watched. There's an increasing number of ways to invest with ETFs.\n\nThe AI boom and success of Nvidia, now the U.S. market's largest stock, have made the semiconductor sector one of the most closely watched corners of the market. Nvidia's rise to a market cap over $4… [+5706 chars]",
+      "event_type": "other_events",
+      "entities": [],
+      "tickers": [
+        "NVDA"
+      ],
+      "sectors": [
+        "Semiconductors"
+      ],
+      "asset_classes": [
+        "Equity"
+      ],
+      "regions": [
+        "US"
+      ],
+      "confidence": 0.30065919438348393,
+      "severity": "low",
+      "_pre_conf": 0.2722861295416365,
+      "_ml_score": 0.0015244794380179826,
+      "_llm_conf": 0.95,
+      "bullets": [
+        "Wall Street bets on chip boom are getting more concentrated, and it could be good thing fo.",
+        "Ereignis: other_events · Priorität: low",
+        "Ticker: NVDA · Quelle: CNBC"
+      ],
+      "why_it_matters": "Potenzielle Relevanz für Titel/Sektor; Details verifizieren.",
+      "draft_note": "Wall Street bets on chip boom are getting more concentrated, and it could be good thing for investors — https://www.cnbc.com/2025/09/19/chip-stocks-ai-tech-investing-etfs.html",
+      "_classified": true,
+      "_classify_fallback": false,
+      "_summarized": true,
+      "_summary_fallback": true,
+      "_headline_fallback": true,
+      "_bullets_fallback": true,
+      "_why_fallback": false
+    },
+    {
+      "id": "c9596e8d555215cb",
+      "published_at": "2025-09-18T15:33:00Z",
+      "source": "MarketWatch",
+      "url": "https://www.marketwatch.com/story/billionaire-david-tepper-is-feeling-miserable-about-stocks-but-wont-fight-the-fed-74d96d45",
+      "headline": "Billionaire David Tepper is feeling ‘miserable’ about stocks, but won’t ‘fight the Fed’",
+      "body_text": "Hedge-fund investor Tepper expects the stock market rally to continue with a few Federal Reserve rate cuts, but sees danger in too many\n\nHedge-fund investor David Tepper says the rally in stocks can continue with the Federal Reserve cutting rates, but sees danger in going too far. - Justin Edmonds/Getty Images\r\nThats billionaire hedge… [+2879 chars]",
+      "event_type": "ceo_exit",
+      "entities": [],
+      "tickers": [],
+      "sectors": [],
+      "asset_classes": [
+        "Equity"
+      ],
+      "regions": [
+        "n/a"
+      ],
+      "confidence": 0.30022178406934974,
+      "severity": "low",
+      "_pre_conf": 0.21365307613742296,
+      "_ml_score": 9.290918892428174e-06,
+      "_llm_conf": 0.95,
+      "bullets": [],
+      "why_it_matters": null,
+      "draft_note": null,
+      "_classified": true,
+      "_classify_fallback": false,
+      "_summarized": false,
+      "_summary_fallback": true,
+      "_headline_fallback": true,
+      "_bullets_fallback": true,
+      "_why_fallback": true
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+
+
+AUSGABE
+{
+  "headline": "Coinbase CEO resolves Kevin Durant's long-standing account access issue",
+  "bullets": [
+    "NBA star Kevin Durant regains access to his Coinbase Bitcoin account",
+    "Coinbase CEO Brian Armstrong confirms account recovery",
+    "Issue resolved after years of being locked out"
+  ],
+  "why_it_matters": "Highlights Coin

@@ -1,0 +1,13 @@
+TYPE=str
+
+
+
+OUTPUT
+{
+  "headline": "Sound Financial Bancorp CEO exits; new CEO appointed",
+  "bullets": [
+    "CEO John Doe resigns, effective immediately.",
+    "Board appoints COO Jane Smith as new CEO.",
+    "No further details provided on transition or compensation."
+  ],
+  "why_it_matters": "CEO departure may impact strategic direction,

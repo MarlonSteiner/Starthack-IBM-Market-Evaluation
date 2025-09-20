@@ -1,0 +1,8 @@
+
+
+AUSGABE
+{
+  "headline": "Eisner kritisiert FCC-Druck auf ABC, unterstützt Kimmel",
+  "bullets": [
+    "Ex-Disney-CEO Michael Eisner unterstützt Jimmy Kimmel, dessen Late-Night-Show von ABC auf unbestimmte Zeit ausgesetzt wurde.",
+    "Kritik an FCC-Vorsitzen

@@ -1,0 +1,11 @@
+TYPE=str
+
+
+
+OUTPUT
+{
+  "headline": "Idaho Power CEO exits; new CEO appointed",
+  "bullets": [
+    "Idaho Power CEO, Stephen M. Young, resigns effective 2025-09-18.",
+    "Board appoints COO, Steven R. Keen, as new CEO, effective 2025-09-19.",
+    "

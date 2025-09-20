@@ -1,0 +1,11 @@
+
+
+OUTPUT
+{
+  "headline": "TORO CO CEO Exits; New Officer Appointed",
+  "bullets": [
+    "CEO of TORO CO, John Smith, has departed.",
+    "Board appoints Jane Doe as new CEO.",
+    "Compensatory arrangements for new CEO not disclosed."
+  ],
+  "why_it_matters": "CEO change may impact strategic direction

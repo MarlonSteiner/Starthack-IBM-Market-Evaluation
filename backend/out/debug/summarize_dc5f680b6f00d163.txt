@@ -1,0 +1,7 @@
+ US
+
+AUSGABE
+{
+  "headline": "Microsoft höht Xbox-Preise in den USA aufgrund der wirtschaftlichen Lage",
+  "bullets": [
+    "Microsoft erhöht die empfohlenen Verkaufspreise mehrerer Xbox-Konsolen in den USA ab Oktober aufgrund 'Veränderungen in der makroökonomischen Umgebung'.

@@ -1,0 +1,9 @@
+
+
+{
+  "event_type": "ceo_exit",
+  "tickers": ["JIMMYKIMMELLIFE", "ABC"],
+  "sectors": ["Entertainment"],
+  "asset_classes": ["Equity"],
+  "regions": ["US"],
+  "confidence

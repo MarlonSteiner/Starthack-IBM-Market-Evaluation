@@ -1,0 +1,8 @@
+
+
+OUTPUT:
+{
+  "headline": "IDACORP INC CEO Exits, New Officers Appointed; Reg FD Disclosure",
+  "bullets": [
+    "IDACORP INC filed an 8-K on 2025-09-19, reporting CEO's departure and new officer appointments.",
+    "The filing includes compensatory arrangements for certain officers and Reg FD

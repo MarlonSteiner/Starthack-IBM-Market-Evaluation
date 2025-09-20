@@ -1,0 +1,9 @@
+
+
+{
+  "event_type": "other_events",
+  "tickers": ["0001471727"],
+  "sectors": ["Healthcare"],
+  "asset_classes": ["Equity"],
+  "regions": ["US"],
+  "confidence": 1.

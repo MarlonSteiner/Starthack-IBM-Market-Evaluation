@@ -1,0 +1,9 @@
+
+
+{
+  "event_type": "mna",
+  "tickers": ["0001771995"],
+  "sectors": ["Entertainment"],
+  "asset_classes": ["Equity"],
+  "regions": ["n/a"],
+  "confidence": 

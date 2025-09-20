@@ -1,0 +1,13 @@
+TYPE=str
+
+
+
+OUTPUT
+{
+  "headline": "TAKE TWO INTERACTIVE SOFTWARE INC: CEO Departs, New Officer Appointed",
+  "bullets": [
+    "CEO David Michael left the company on 2025-09-19.",
+    "New CEO, John Smith, appointed effective immediately.",
+    "No financial details disclosed in the filing."
+  ],
+  "why_it_matters":

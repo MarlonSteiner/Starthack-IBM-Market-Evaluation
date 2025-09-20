@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  /* HINZUGEFÜGT: Erhöht die Standard-Schriftstärke für die gesamte App minimal.
+     font-medium entspricht font-weight: 500; */
+  @apply font-medium;
+}
+
+/* Stil für die rote Benachrichtigungs-Plakette */
+.notification-badge {
+  background-color: #ef4444; /* red-500 */
+  color: white;
+  border-radius: 9999px;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-left: 0.5rem;
+  line-height: 1;
+  vertical-align: middle;
+}

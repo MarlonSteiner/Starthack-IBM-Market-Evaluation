@@ -1,0 +1,12 @@
+
+COMPANY: n/a
+
+AUSGABE
+{
+  "headline": "Gas prices expected to drop to $3 per gallon in October",
+  "bullets": [
+    "Gas prices typically decline in the latter half of the year.",
+    "Expert predicts drop to around $3 per gallon in October.",
+    "Gas is one of the few goods not becoming more expensive due to inflation."
+  ],
+ 

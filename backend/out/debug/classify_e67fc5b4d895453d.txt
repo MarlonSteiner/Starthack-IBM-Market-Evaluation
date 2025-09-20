@@ -1,0 +1,9 @@
+
+
+{
+  "event_type": "mna",
+  "tickers": ["0001854795"],
+  "sectors": ["Industrials"],
+  "asset_classes": ["Equity"],
+  "regions": ["US"],
+  "confidence": 1

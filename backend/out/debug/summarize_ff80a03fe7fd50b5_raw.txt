@@ -1,0 +1,11 @@
+TYPE=str
+
+
+
+OUTPUT
+{
+  "headline": "Stride, Inc. CEO exits; new CEO appointed",
+  "bullets": [
+    "Stride, Inc. CEO, John Doe, resigned effective 2025-09-18.",
+    "New CEO, Jane Smith, appointed effective 2025-09-19.",
+    "No further details on reasons for CEO's

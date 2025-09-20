@@ -1,0 +1,11 @@
+
+
+OUTPUT
+{
+  "headline": "Microbot Medical Inc. CEO Exits, New Officer Appointed",
+  "bullets": [
+    "CEO of Microbot Medical Inc. has departed.",
+    "New officer appointed in CEO's place.",
+    "Details of compensatory arrangements not disclosed."
+  ],
+  "why_it_maters": "CEO departure may impact strategic direction

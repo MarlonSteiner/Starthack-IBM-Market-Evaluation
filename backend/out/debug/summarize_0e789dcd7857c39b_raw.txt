@@ -1,0 +1,13 @@
+TYPE=str
+
+
+
+OUTPUT
+{
+  "headline": "Neolara Corp. CEO exits; no immediate successor named",
+  "bullets": [
+    "CEO of Neolara Corp. steps down, no successor named",
+    "Board to consider CEO succession in upcoming meetings",
+    "No material changes in company operations or strategy expected"
+  ],
+  "why_it_matters": "CEO departure may signal potential shifts

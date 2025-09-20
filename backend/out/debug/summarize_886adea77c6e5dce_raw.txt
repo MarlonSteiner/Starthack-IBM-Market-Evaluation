@@ -1,0 +1,13 @@
+TYPE=str
+
+
+
+OUTPUT
+{
+  "headline": "American Picture House Corp CEO exits, new CEO appointed",
+  "bullets": [
+    "CEO John Doe resigns, effective immediately.",
+    "Board appoints COO Jane Smith as interim CEO.",
+    "No further details on compensation or transition plan provided."
+  ],
+  "why_it_matters": "CEO departure signals potential operational disruption, with

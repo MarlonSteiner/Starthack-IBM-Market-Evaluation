@@ -1,0 +1,11 @@
+
+
+AUSGABE
+{
+  "headline": "Wall Street's chip sector focus intensifies, driven by AI and Nvidia's success",
+  "bullets": [
+    "AI and Nvidia's market cap surge drive sector attention.",
+    "ETFs offer multiple investment avenues in semiconductors.",
+    "Nvidia now largest U.S. market cap stock."
+  ],
+  "why_it_matters": "

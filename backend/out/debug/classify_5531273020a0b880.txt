@@ -1,0 +1,9 @@
+
+
+{
+  "event_type": "ceo_exit",
+  "tickers": ["0000737758"],
+  "sectors": ["Industrials"],
+  "asset_classes": ["Equity"],
+  "regions": ["US"],
+  "confidence":

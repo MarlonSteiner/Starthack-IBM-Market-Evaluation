@@ -1,0 +1,9 @@
+
+
+{
+  "event_type": "ceo_exit",
+  "tickers": ["JPM", "BAC", "MS", "C", "V"],
+  "sectors": ["Financials"],
+  "asset_classes": ["Equity"],
+  "regions": ["US"],
+  "

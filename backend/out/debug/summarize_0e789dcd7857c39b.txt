@@ -1,0 +1,11 @@
+
+
+OUTPUT:
+{
+  "headline": "Neolara Corp. CEO Exits; New Officers Appointed",
+  "bullets": [
+    "CEO of Neolara Corp. (0001941360) has departed.",
+    "New officers appointed following CEO's exit.",
+    "Compensatory arrangements for new officers not disclosed."
+  ],
+  "why_it
