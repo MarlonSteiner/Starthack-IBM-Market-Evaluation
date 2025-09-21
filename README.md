@@ -114,6 +114,7 @@ npm start
 
 ## 📂 Project Structure  
 ```
+|-- backend
 wp-news-dashboard/
 │
 ├── backend/                 # Express API + LowDB
