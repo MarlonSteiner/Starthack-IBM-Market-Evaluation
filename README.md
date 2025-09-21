@@ -75,18 +75,26 @@ npm install
 ### 3️⃣ Environment Variables  
 Create `backend/.env` with:  
 ```ini
-# Slack
-SLACK_WEBHOOK_URL=https://hooks.slack.com/services/XXX/YYY/ZZZ
-SLACK_BOT_TOKEN=xoxb-XXXXXXXX
-SLACK_USER_ID=UXXXXXXXX
+NEWSAPI_API_KEY=
+MARKETAUX_API_TOKEN=
+WATCHLIST=FDX,NVDA,INTC,CRWD,AXP
+NEWSAPI_DOMAINS=reuters.com,apnews.com,cnbc.com,marketwatch.com,barrons.com,fortune.com,forbes.com,thestreet.com,investors.com,theguardian.com,techcrunch.com,nzz.ch,handelszeitung.ch
 
-# OpenAI
-OPENAI_API_KEY=sk-XXXXXXXX
 
-# Email
-EMAIL_SENDER=yourmail@gmail.com
-EMAIL_PASSWORD=your-app-password
+
+WATSONX_API_KEY=
+WATSONX_BASE_URL=https://eu-de.ml.cloud.ibm.com
+WATSONX_PROJECT_ID=
+WATSONX_MODEL_ID=ibm/granite-13b-instruct
 ```
+Create `frontend/wp-news-dashboard/backend/.env` with: 
+```ini
+SLACK_WEBHOOK_URL=
+SLACK_BOT_TOKEN=
+SLACK_USER_ID=
+OPENAI_API_KEY=
+```
+
 
 ### 4️⃣ Run Backend  
 ```bash
